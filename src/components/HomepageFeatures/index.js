@@ -2,40 +2,40 @@ import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
 
-const FeatureList = [
+const AboutMeList = [
   {
-    title: 'Easy to Use',
+    title: 'Passionate Explorer',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        I love learning new things and experimenting in my small home lab setup. My motto? "Break and fix!"
+        It is all about hands-on explodation and embracing every opportunity to grow.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: 'Community Contributor',
+    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        I enjoy creating material and contributing to the developer community through open source
+        projects, blog posts, and mentorship.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Sports Driven',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+      You will often find me enjoying nature or on the field, playing team sports.
+      Recently, I have joined a local women’s rugby team, where I am embracing the creativity of the sport itself.
       </>
     ),
   },
 ];
 
-function Feature({Svg, title, description}) {
+function AboutMe({Svg, title, description}) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
@@ -54,8 +54,8 @@ export default function HomepageFeatures() {
     <section className={styles.features}>
       <div className="container">
         <div className="row">
-          {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
+          {AboutMeList.map((props, idx) => (
+            <AboutMe key={idx} {...props} />
           ))}
         </div>
       </div>

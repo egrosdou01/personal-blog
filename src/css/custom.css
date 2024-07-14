@@ -5,7 +5,7 @@
  */
 
 /* You can override the default Infima variables here. */
-:root {
+/* :root {
   --ifm-color-primary: #2e8555;
   --ifm-color-primary-dark: #29784c;
   --ifm-color-primary-darker: #277148;
@@ -15,10 +15,10 @@
   --ifm-color-primary-lightest: #3cad6e;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-}
+} */
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
+/* [data-theme='dark'] {
   --ifm-color-primary: #25c2a0;
   --ifm-color-primary-dark: #21af90;
   --ifm-color-primary-darker: #1fa588;
@@ -27,4 +27,57 @@
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+} */
+
+:root {
+  /* Light mode colors */
+  --ifm-color-primary: #662e85;
+  --ifm-color-primary-dark: #5c2978;
+  --ifm-color-primary-darker: #572771;
+  --ifm-color-primary-darkest: #47205d;
+  --ifm-color-primary-light: #703392;
+  --ifm-color-primary-lighter: #753599;
+  --ifm-color-primary-lightest: #853cad;
+  --ifm-background-color: #fafafa;
+}
+
+/* Enhanced styles for code sections in light mode */
+pre {
+  background-color: #f5f5f5; /* Light gray background */
+  border: 1px solid #ddd; /* Light gray border */
+  padding: 12px;
+  border-radius: 4px;
+  overflow: auto;
+  line-height: 1.5; /* Adjust line height for better readability */
+}
+
+code {
+  font-family: 'Roboto Mono', monospace; /* Example: Use a monospace font */
+  color: #333; /* Dark gray text color */
+}
+
+/* Dark mode */
+:root[data-theme='dark'] {
+  /* Dark mode colors */
+  --ifm-color-primary: #c8a3e1;
+  --ifm-color-primary-dark: #b690d3;
+  --ifm-color-primary-darker: #a97dc5;
+  --ifm-color-primary-darkest: #9162ab;
+  --ifm-color-primary-light: #d0b4ea;
+  --ifm-color-primary-lighter: #d5baf0;
+  --ifm-color-primary-lightest: #e2ccfa;
+  --ifm-background-color: #121212;
+  --ifm-text-color: #ffffff; /* White text color for dark mode */
+}
+
+/* Enhanced styles for code sections in dark mode */
+:root[data-theme='dark'] pre {
+  background-color: #1e1e1e; /* Dark gray background */
+  color: #d4d4d4; /* Light gray text color */
+  border: 1px solid #333; /* Darker border */
+}
+
+:root[data-theme='dark'] code {
+  font-family: 'Roboto Mono', monospace; /* Example: Use a monospace font */
+  color: #ffffff; /* White text color */
 }
