@@ -4,8 +4,7 @@ import styles from './styles.module.css';
 
 const AboutMeList = [
   {
-    title: 'Passionate Explorer',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: '🚀 Passionate Explorer',
     description: (
       <>
         I love learning new things and experimenting in my small home lab setup. My motto? "Break and fix!"
@@ -14,8 +13,7 @@ const AboutMeList = [
     ),
   },
   {
-    title: 'Community Contributor',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: '🤝 Community Contributor',
     description: (
       <>
         I enjoy creating material and contributing to the developer community through open source
@@ -24,23 +22,29 @@ const AboutMeList = [
     ),
   },
   {
-    title: 'Sports Driven',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: '💻 Expertise',
+    description: (
+      <>
+      My expertise lay around GitOps and DevOps practises.
+      I create content about Cilium, Rancher, RKE2 deployments, Openshift deployments in on-prem and cloud environments.
+      </>
+    ),
+  },
+  {
+    title: '🏉 Sports Enthusiast',
     description: (
       <>
       You will often find me enjoying nature or on the field, playing team sports.
       Recently, I have joined a local women’s rugby team, where I am embracing the creativity of the sport itself.
       </>
     ),
+    center: true,
   },
 ];
 
-function AboutMe({Svg, title, description}) {
+function AboutMe({ Svg, title, description, center }) {
   return (
-    <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
-      </div>
+    <div className={clsx('col', center && 'col--4 offset--center')}>
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>
         <p>{description}</p>

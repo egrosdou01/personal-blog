@@ -9,7 +9,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Welcome to Eleni's Blog",
-  tagline: 'I am passionate about breaking and fixing things! Follow my simple blog posts, where I share insights based on my small home lab setup.',
+  tagline: 'I am passionate about breaking and fixing things! Follow the simple blog posts, where I share insights based on my small home lab setup.',
   favicon: 'https://github.com/egrosdou01.png',
 
   // Set the production url of your site here
@@ -41,19 +41,13 @@ const config = {
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
-        // docs: {
-        //   sidebarPath: './sidebars.js',
-        //   // Please change this to your repo.
-        //   // Remove this to remove the "edit this page" links.
-        //   editUrl:
-        //     'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-        // },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          blogTitle: 'Eleni Blog',
+          blogDescription: 'Eleni Blog',
+          postsPerPage: 'ALL',
+          blogSidebarTitle: 'All posts',
+          blogSidebarCount: 'ALL',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -131,7 +125,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Eleni Grosdouli Personal Blog`,
+        copyright: `Copyright © ${new Date().getFullYear()} Eleni Grosdouli Blog`,
       },
       prism: {
         theme: prismThemes.github,

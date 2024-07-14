@@ -5,32 +5,8 @@
  */
 
 /* You can override the default Infima variables here. */
-/* :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-} */
-
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-/* [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-} */
 
 :root {
-  /* Light mode colors */
   --ifm-color-primary: #662e85;
   --ifm-color-primary-dark: #5c2978;
   --ifm-color-primary-darker: #572771;
@@ -41,24 +17,22 @@
   --ifm-background-color: #fafafa;
 }
 
-/* Enhanced styles for code sections in light mode */
 pre {
-  background-color: #f5f5f5; /* Light gray background */
-  border: 1px solid #ddd; /* Light gray border */
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
   padding: 12px;
   border-radius: 4px;
   overflow: auto;
-  line-height: 1.5; /* Adjust line height for better readability */
+  line-height: 1.5;
 }
 
 code {
-  font-family: 'Roboto Mono', monospace; /* Example: Use a monospace font */
-  color: #333; /* Dark gray text color */
+  font-family: 'Roboto Mono', monospace;
+  color: #333;
 }
 
 /* Dark mode */
 :root[data-theme='dark'] {
-  /* Dark mode colors */
   --ifm-color-primary: #c8a3e1;
   --ifm-color-primary-dark: #b690d3;
   --ifm-color-primary-darker: #a97dc5;
@@ -67,17 +41,52 @@ code {
   --ifm-color-primary-lighter: #d5baf0;
   --ifm-color-primary-lightest: #e2ccfa;
   --ifm-background-color: #121212;
-  --ifm-text-color: #ffffff; /* White text color for dark mode */
+  --ifm-text-color: #ffffff;
 }
 
-/* Enhanced styles for code sections in dark mode */
 :root[data-theme='dark'] pre {
-  background-color: #1e1e1e; /* Dark gray background */
-  color: #d4d4d4; /* Light gray text color */
-  border: 1px solid #333; /* Darker border */
+  background-color: #1e1e1e;
+  color: #d4d4d4; 
+  border: 1px solid #333; 
 }
 
 :root[data-theme='dark'] code {
-  font-family: 'Roboto Mono', monospace; /* Example: Use a monospace font */
-  color: #ffffff; /* White text color */
+  font-family: 'Roboto Mono', monospace;
+  color: #ffffff; 
+}
+
+.footer__links {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.footer__col {
+  flex: 1;
+  margin: 0 1rem;
+}
+
+.footer__item {
+  margin-bottom: 1rem;
+}
+
+.footer__links .footer__link-item {
+  margin-right: 20px;
+}
+
+.footer__links .footer__link-item a.footer__link {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.footer__bottom {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.footer__title {
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 30px;
+  margin-left: 0;
 }
