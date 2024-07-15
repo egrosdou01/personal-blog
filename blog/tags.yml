@@ -1,16 +1,32 @@
-facebook:
-  label: Facebook
-  permalink: /facebook
-  description: Facebook tag description
 hello:
   label: Hello
   permalink: /hello
   description: Hello tag description
-docusaurus:
-  label: Docusaurus
-  permalink: /docusaurus
-  description: Docusaurus tag description
-hola:
-  label: Hola
-  permalink: /hola
-  description: Hola tag description
+ci/cd:
+  label: CI/CD
+  permalink: /ci-cd
+  description: "Continuous Integration and Continuous Delivery"
+open-source:
+  label: Open Source
+  permalink: /open-source
+  description: Open source software
+kubernetes:
+  label: Kubernetes
+  permalink: /kubernetes
+  description: Container orchestration platform for automating application deployment, scaling, and management
+cilium:
+  label: Cilium
+  permalink: /cilium
+  description: eBPF-based Networking, Security, and Observability for Kubernetes
+devops:
+  label: DevOps
+  permalink: /devops
+  description: Set of practices that combines software development and IT operations
+gitops:
+  label: GitOps
+  permalink: /gitops
+  description: Operational framework that uses Git as a single source of truth for declarative infrastructure and applications
+sveltos:
+  label: Sveltos
+  permalink: /sveltos
+  description: Open source project Sveltos
