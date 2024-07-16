@@ -9,10 +9,12 @@ import {
   EmailShareButton,
   EmailIcon,
 } from 'react-share';
+import styles from './SocialShare.module.css';
 
 const SocialShare = ({ title, url }) => {
   return (
     <div className="social-share">
+      <p className={styles.shareText}>SHARE</p>
       <LinkedinShareButton url={url}>
         <LinkedinIcon size={25} round />
       </LinkedinShareButton>
