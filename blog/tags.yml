@@ -30,3 +30,7 @@ sveltos:
   label: Sveltos
   permalink: /sveltos
   description: Open source project Sveltos
+rke2:
+  label: RKE2
+  permalink: /rke2
+  description: Rancher Kubernetes Engine 2
