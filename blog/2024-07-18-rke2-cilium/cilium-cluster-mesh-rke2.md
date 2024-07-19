@@ -138,7 +138,7 @@ $ export KUBECONFIG=<directory of kubeconfig>
 $ kubectl nodes
 ```
 
-## Step 2: Helm List and Values export
+## Step 2: Helm list and values export
 RKE2 comes with its own Cilium CNI Helm chart. That means, RKE2 clusters will have an RKE2 Cilium Helm chart deployment in the `kube-system` namespace.
 
 ### Validate
@@ -205,7 +205,7 @@ operator:
 The configuration comes from the `machine_global_config` and `chart_values` sections defined in the Terraform code found in [Step 0](#step-0-rke2-terraform-provider).
 :::
 
-## Step 3: Update Helm Values for Cilium Cluster Mesh
+## Step 3: Cilium Cluster Mesh Helm Values
 
 To setup the cluster mesh, we will need to include the `rke2-charts` repo and afterwards, update the Helm values with the required cluster mesh settings. For this demonstration, we will use the `NodePort` deployment. In a production environment, a `LoadBalancer` deployment is recommended as we do not have to rely on Node availability.
 
@@ -298,7 +298,7 @@ $ helm upgrade rke2-cilium rke2-charts/rke2-cilium --version 1.15.500 --namespac
 $ helm list -n kube-system
 ```
 
-Perform the commands above to `mesh02`.
+Perform the commands above for the `mesh02` cluster.
 
 :::tip
 The `helm upgrade` command will create a new revision of the `rke2-cilium` application and show if the update was successful or not. Additionally, the cilium daemonset will get restarted and the Clustermesh API deployment will get created. Execute the commands below to double-check the update action.
