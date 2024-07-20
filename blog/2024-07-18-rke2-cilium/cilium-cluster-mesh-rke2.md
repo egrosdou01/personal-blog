@@ -15,11 +15,6 @@ In today's post, we will go through the step-by-step process of forming a Cilium
 
 Additionally, we will use the [shared CA](https://docs.cilium.io/en/v1.15/network/clustermesh/clustermesh/#shared-certificate-authority) (Certificate Authority) approach as this is a convenient way to form a cluster mesh in an automated fashion and also the best practise for the Hubble Relay setup. The approach will enable **mTLS** accross clusters.
 
-
-## Diagram
-
-<!-- ![Cilium, Sveltos, EKS](./cilium_sveltos_eks.jpg) -->
-
 ## Lab Setup
 
 ```bash
@@ -313,11 +308,118 @@ $ kubectl get pods,svc -n kube-system | grep -i clustermesh
 
 ## Step 4: Validate Cilium Cluster Mesh
 
-As we will not use the cilium CLI to ensure the Cilium cluster mesh setup works as expected, we will exec into the cilium agent pods and check the required details.
+As we do not use the cilium CLI, to ensure the Cilium cluster mesh works as expected, we will exec into the cilium daemonset and check the required details.
+
+```bash
+$ kubectl get ds -n kube-system | grep -i cilium
+cilium                          4         4         4       4            4           kubernetes.io/os=linux   7d6h
+```
+
+### On mesh01 and mesh02
+
+```bash
+$ kubectl exec -it ds/cilium -n kube-system -- cilium status | grep -i clustermesh
+
+Defaulted container "cilium-agent" out of: cilium-agent, install-portmap-cni-plugin (init), config (init), mount-cgroup (init), apply-sysctl-overwrites (init), mount-bpf-fs (init), clean-cilium-state (init), install-cni-binaries (init)
+ClusterMesh:             1/1 clusters ready, 11 global-services
+```
+
+On both sides, the `ClusterMesh` should point to `1/1 clusters ready`.
+
+```bash
+$ kubectl exec -it ds/cilium -n kube-system -- cilium-health status               
+Defaulted container "cilium-agent" out of: cilium-agent, install-portmap-cni-plugin (init), config (init), mount-cgroup (init), apply-sysctl-overwrites (init), mount-bpf-fs (init), clean-cilium-state (init), install-cni-binaries (init)
+Probe time:   2024-07-20T13:58:47Z
+Nodes:
+  mesh01/mesh01-controller-3d16581b-7q5bj (localhost):
+    Host connectivity to x.x.x.x:
+      ICMP to stack:   OK, RTT=693.829µs
+      HTTP to agent:   OK, RTT=118.583µs
+    Endpoint connectivity to 10.244.1.71:
+      ICMP to stack:   OK, RTT=688.411µs
+      HTTP to agent:   OK, RTT=251.927µs
+  mesh01/mesh01-controller-3d16581b-v58rq:
+    Host connectivity to x.x.x.x:
+      ICMP to stack:   OK, RTT=671.007µs
+      HTTP to agent:   OK, RTT=237.395µs
+    Endpoint connectivity to 10.244.0.75:
+      ICMP to stack:   OK, RTT=702.976µs
+      HTTP to agent:   OK, RTT=342.115µs
+  mesh01/mesh01-worker-7ced0c6c-lz9sp:
+    Host connectivity to x.x.x.x:
+      ICMP to stack:   OK, RTT=819.21µs
+      HTTP to agent:   OK, RTT=397.398µs
+    Endpoint connectivity to 10.244.3.215:
+      ICMP to stack:   OK, RTT=821.223µs
+      HTTP to agent:   OK, RTT=465.965µs
+  mesh01/mesh01-worker-7ced0c6c-w294x:
+    Host connectivity to x.x.x.x:
+      ICMP to stack:   OK, RTT=738.787µs
+      HTTP to agent:   OK, RTT=335.803µs
+    Endpoint connectivity to 10.244.2.36:
+      ICMP to stack:   OK, RTT=693.326µs
+      HTTP to agent:   OK, RTT=426.571µs
+  mesh02/mesh02-controller-52d8e160-b27rn:
+    Host connectivity to x.x.x.x:
+      ICMP to stack:   OK, RTT=683.278µs
+      HTTP to agent:   OK, RTT=335.076µs
+    Endpoint connectivity to 10.245.0.106:
+      ICMP to stack:   OK, RTT=818.386µs
+      HTTP to agent:   OK, RTT=387.314µs
+  mesh02/mesh02-controller-52d8e160-q4rvf:
+    Host connectivity to x.x.x.x:
+      ICMP to stack:   OK, RTT=683.097µs
+      HTTP to agent:   OK, RTT=301.448µs
+    Endpoint connectivity to 10.245.1.75:
+      ICMP to stack:   OK, RTT=748.101µs
+      HTTP to agent:   OK, RTT=510.124µs
+  mesh02/mesh02-worker-a1c14ae0-5l759:
+    Host connectivity to x.x.x.x:
+      ICMP to stack:   OK, RTT=631.954µs
+      HTTP to agent:   OK, RTT=266.391µs
+    Endpoint connectivity to 10.245.3.232:
+      ICMP to stack:   OK, RTT=751.853µs
+      HTTP to agent:   OK, RTT=433.049µs
+  mesh02/mesh02-worker-a1c14ae0-c7tcb:
+    Host connectivity to x.x.x.x:
+      ICMP to stack:   OK, RTT=671.823µs
+      HTTP to agent:   OK, RTT=365.949µs
+    Endpoint connectivity to 10.245.2.69:
+      ICMP to stack:   OK, RTT=690.894µs
+      HTTP to agent:   OK, RTT=466.73µs
+```
+
+:::note
+With the cilium-health status command, you should be able to see all the nodes from both clusters. Check the ICMP and HTTP status. Should be "OK".
+
+Also, it might take a couple of minutes till the cilium-health status is available.
+
+If the time-out persist, have a look at the firewall rules and whether traffic between the clusters is allowed.
+:::
+
+:::warning
+The NodePort IP addresses set for the cluster mesh needs to be the IP addresses of the worker node instead of the master node. If they are the master node, the Cilium Cluster Mesh will not get deployed and we will get the below error.
+```
+remote-etcd-cluster01                                                             4m25s ago      4s ago       22      failed to detect whether the cluster configuration is required: etcdserver: permission denied 
+```
+:::
+
+## Step 5: Hubble UI
+
+To start working with the Hubble UI we can use the `kubectl port-forward` of the Hubble UI service or update the existing `rke2-cilium` deployment on one of the nodes and expose the Hubble UI as a `NodePort` service. Just include the below in the `values_mesh01.yaml` or the `values_mesh02.yaml` file.
+
+```yaml
+  ui:
+    enabled: true
+    service:
+      type: NodePort
+```
+
+More information about the RKE2 Cilium Helm Chart values, have a look [here](https://artifacthub.io/packages/helm/rke2-charts/rke2-cilium/1.15.500).
 
 
 ## Conclusions
 
-That’s it! We have performed a Cilium cluster mesh between two on-prem RKE2 cluster in just a few steps!
+That’s it! We performed a Cilium cluster mesh between two on-prem RKE2 clusters in just a few steps!
 
 That’s a wrap for this post! 🎉 Thanks for reading! Stay tuned for more exciting updates!
