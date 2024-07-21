@@ -15,6 +15,9 @@
   --ifm-color-primary-lighter: #753599;
   --ifm-color-primary-lightest: #853cad;
   --ifm-background-color: #fafafa;
+  --delay: 0;
+  --duration: 800ms;
+  --iterations: 1;
 }
 
 pre {
@@ -89,4 +92,134 @@ code {
   padding-left: 10px;
   padding-right: 30px;
   margin-left: 0;
+}
+
+.mixmax {
+  display: grid;
+  grid-template-columns: 540px 350px;
+  text-align: left;
+}
+
+@media screen and (max-width: 996px) {
+  .mixmax {
+    padding: 3rem;
+    display: flex;
+  }
+}
+
+.main-text-container p {
+  font-size: 46px;
+  font-weight: 700;
+  margin: 0
+}
+
+.main-image-container {
+  text-align: center;
+  font-size: 124px;
+}
+
+@media screen and (max-width: 996px) {
+  .main-image-container {
+    display: none;
+  }
+}
+
+.name {
+  background: -webkit-linear-gradient(#ef65d8, #881dcf);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 56px;
+  font-weight: 800;
+  margin: 0;
+  transition: transform .2s;
+}
+
+.tagline {
+  font-size: 24px !important;
+  font-weight: 400 !important;
+  color: rgba(60, 60, 67, 0.78);
+}
+
+:root[data-theme='dark'] .tagline {
+  color: #ffffff; 
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 10rem;
+}
+
+@media screen and (max-width: 996px) {
+  .header {
+    padding: 0;
+  }
+}
+
+.reveal-text,
+.reveal-text::after {
+  animation-delay: var(--animation-delay, 2s);
+  animation-iteration-count: var(--iterations, 1);
+  animation-duration: var(--duration, 800ms);
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+.reveal-text {
+  --animation-delay: var(--delay, 0);
+  --animation-duration: var(--duration, 800ms);
+  --animation-iterations: var(--iterations, 1);
+  position: relative;
+  animation-name: clip-text;
+  color: #FFF;
+  white-space: nowrap;
+  cursor: default;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: -webkit-linear-gradient(#ef65d8, #881dcf);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    pointer-events: none;
+    animation-name: text-revealer;
+  }
+  
+}
+
+@keyframes clip-text {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+
+@keyframes text-revealer {
+  
+  0%, 50% {
+    transform-origin: 0 50%;
+  }
+  
+  60%, 100% {
+    transform-origin: 100% 50%;   
+  }
+
+  
+  60% {
+    transform: scaleX(1);
+  }
+  
+  100% {
+    transform: scaleX(0);
+  }
 }
