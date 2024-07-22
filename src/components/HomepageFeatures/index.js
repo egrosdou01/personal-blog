@@ -7,7 +7,7 @@ const AboutMeList = [
     title: '🚀 Passionate Explorer',
     description: (
       <>
-      I love learning new things and experimenting in my small home lab setup.
+      I love learning new things and experimenting in a home lab setup.
       My motto? "Break and fix!" is all about hands-on exploration and embracing every opportunity to grow.
       </>
     ),
@@ -16,7 +16,7 @@ const AboutMeList = [
     title: '🤝 Community Contributor',
     description: (
       <>
-      I enjoy creating material and contributing to the developer community through open-source projects, blog posts, and mentorship.
+      I enjoy creating material and contributing to the community through open-source projects, blog posts, and mentorship.
       </>
     ),
   },
@@ -25,7 +25,7 @@ const AboutMeList = [
     description: (
       <>
       My expertise lies around GitOps and DevOps practices.
-      I create content about Cilium, Rancher, RKE2 deployments, and Openshift deployments in on-prem and cloud environments.
+      I create content about <a href="https://github.com/cilium/cilium">Cilium</a>, <a href="https://github.com/rancher/rancher">Rancher</a>, <a href="https://github.com/projectsveltos">ProjectSveltos</a>, <a href="https://docs.rke2.io/">RKE2 deployments</a>, and <a href="https://www.redhat.com/en/technologies/cloud-computing/openshift">Openshift</a> deployments in on-prem and cloud environments.
       </>
     ),
   },

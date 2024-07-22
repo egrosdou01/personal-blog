@@ -9,7 +9,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Welcome to Eleni's Blog",
-  tagline: 'I am passionate about breaking and fixing things! Follow me on this journey of deploying DevOps and GitOps approaches on on-prem and Cloud datacenter!',
+  tagline: 'I am passionate about breaking and fixing things! Follow me on this journey of deploying DevOps and GitOps approaches on on-prem and Cloud datacenters!',
   favicon: 'https://github.com/egrosdou01.png',
 
   // Set the production url of your site here

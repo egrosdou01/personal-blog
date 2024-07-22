@@ -10,10 +10,10 @@ tags: [cilium,rke2,open-source,kubernetes,gitops,devops]
 
 After spending some time working with the on-prem [RKE2](https://docs.rke2.io/) lab setup, I came to notice a couple of issues while forming in an automated fashion the [Cilium cluster mesh](https://docs.cilium.io/en/stable/network/clustermesh/clustermesh/) between on-prem clusters.
 
-In today's post, we will go through the step-by-step process of forming a Cilium Cluster Mesh and explain any issues that might have arised by following the **GitOps** approach. The cilium CLI will not be required. The deployment will be perform primarily via `Helm` and `kubectl`.
+In today's post, we will go through the step-by-step process of forming a **Cilium Cluster Mesh** and explain any issues that might have arisen by following the **GitOps** approach. The cilium CLI will not be required. The deployment will be performed primarily via `Helm` and `kubectl`.
 <!--truncate-->
 
-Additionally, we will use the [shared CA](https://docs.cilium.io/en/v1.15/network/clustermesh/clustermesh/#shared-certificate-authority) (Certificate Authority) approach as this is a convenient way to form a cluster mesh in an automated fashion and also the best practise for the Hubble Relay setup. The approach will enable **mTLS** accross clusters.
+Additionally, we will use the [shared CA](https://docs.cilium.io/en/v1.15/network/clustermesh/clustermesh/#shared-certificate-authority) (Certificate Authority) approach as this is a convenient way to form a cluster mesh in an automated fashion and also the best practise for the Hubble Relay setup. The approach will enable **mTLS** across clusters.
 
 ## Lab Setup
 
@@ -28,7 +28,7 @@ Additionally, we will use the [shared CA](https://docs.cilium.io/en/v1.15/networ
 +-------------------+----------+
 |    Deployment     | Version  |
 +-------------------+----------+
-| Rancher2 Provider | 4.2.0    |
+| Rancher2 Provider |  4.2.0   |
 |     Cilium        | 1.15.500 |
 +-------------------+----------+
 ```
@@ -37,13 +37,13 @@ Additionally, we will use the [shared CA](https://docs.cilium.io/en/v1.15/networ
 
 ### Infrastructure
 
-For this demonstration, we assume readers have at least two RKE2 clusters up and running. In our case, to create an RKE2 cluster on-prem we used the [Rancher2](https://registry.terraform.io/providers/rancher/rancher2/latest/docs) Terraform provider. The provider allows users to create different resources across different platform alongside defining information for the RKE2 deployment like IP Address handling, CNI (Container Network Interface) custom configuration etc.
+For this demonstration, we assume readers have at least two RKE2 clusters up and running. In our case, to create an RKE2 cluster on-prem we used the [Rancher2](https://registry.terraform.io/providers/rancher/rancher2/latest/docs) Terraform provider. The provider allows users to create different resources across different platforms alongside defining information for the RKE2 deployment like IP Address handling, and CNI (Container Network Interface) custom configuration.
 
 ### Cilium Cluster Mesh
 
 - The **Cluster Name** and the **Cluster ID** must be unique.
 - The **Pods** and the **Services CIDR** ranges must be unique across all the Kubernetes Clusters. The pods need to communicate over a unique IP address. See the IP address schema table above.
-- Node CIDRs must be unique. The Nodes need have IP connectivity.
+- Node CIDRs must be unique. The Nodes to have IP connectivity.
 - The Cilium pods must connect to the `ClusterMesh API Server` service exposed on every Kubernetes cluster.
 
 ### Resources
@@ -123,10 +123,10 @@ The below snippet is an example configuration on how to deploy an RKE2 cluster v
   }
 
 ```
-As the focus here is more about the **Cilium Cluster Mesh** setup, we will not go into much detail about the Terraform RKE2 deployment. If there is demand for an in-depth blog post about Terraform RKE2 deployments, feel fee to get in touch.
+As the focus here is more on the **Cilium Cluster Mesh** setup, we will not go into much detail about the Terraform RKE2 deployment. If there is demand for an in-depth blog post about Terraform RKE2 deployments, feel free to get in touch.
 
-## Step 1: Export Kubeconfig
-Either from the Terraform execution plan or via the Rancher UI, collect the kubeconfig of the RKE2 clusters we will form the Cilium cluster mesh. Alternatively, we can `SSH` into one of the RKE2 master nodes and collect the `kubeconfig` found in the directory `/ect/rancher/rke2/rke2.yaml`.
+## Step 1: Export kubeconfig
+Either from the Terraform execution plan or via the Rancher UI, collect the kubeconfig of the RKE2 clusters. Alternatively, we can `SSH` into one of the RKE2 master nodes and collect the `kubeconfig` found in the directory `/etc/rancher/rke2/rke2.yaml`.
 
 ```bash
 $ export KUBECONFIG=<directory of kubeconfig>
@@ -134,7 +134,7 @@ $ kubectl nodes
 ```
 
 ## Step 2: Helm list and values export
-RKE2 comes with its own Cilium CNI Helm chart. That means, RKE2 clusters will have an RKE2 Cilium Helm chart deployment in the `kube-system` namespace.
+RKE2 comes with its own Cilium CNI Helm chart. That means RKE2 clusters will have an RKE2 Cilium Helm chart deployment in the `kube-system` namespace.
 
 ### Validate
 
@@ -202,7 +202,7 @@ The configuration comes from the `machine_global_config` and `chart_values` sect
 
 ## Step 3: Cilium Cluster Mesh Helm Values
 
-To setup the cluster mesh, we will need to include the `rke2-charts` repo and afterwards, update the Helm values with the required cluster mesh settings. For this demonstration, we will use the `NodePort` deployment. In a production environment, a `LoadBalancer` deployment is recommended as we do not have to rely on Node availability.
+To set up the Cilium cluster mesh, we need to include the `rke2-charts` repo and later on, update the Helm values with the required cluster mesh settings. For this demonstration, we will use the `NodePort` deployment. For production environments, a `LoadBalancer` deployment is recommended as we do not have to rely on Node availability.
 
 ### Add rke2-charts Repo
 
@@ -285,7 +285,7 @@ clustermesh:
 
 ### Update mesh01/mesh02 Helm deployment
 
-To ensure the updated Helm values are applied, we will use the HELM cli to update the `rke2-cilium` deployment.
+To ensure the updated Helm values are applied, we will use the HELM CLI to update the `rke2-cilium` deployment.
 
 ```bash
 $ helm upgrade rke2-cilium rke2-charts/rke2-cilium --version 1.15.500 --namespace kube-system -f values_mesh01.yaml
@@ -293,7 +293,7 @@ $ helm upgrade rke2-cilium rke2-charts/rke2-cilium --version 1.15.500 --namespac
 $ helm list -n kube-system
 ```
 
-Perform the commands above for the `mesh02` cluster.
+Perform the commands for the `mesh02` cluster.
 
 :::tip
 The `helm upgrade` command will create a new revision of the `rke2-cilium` application and show if the update was successful or not. Additionally, the cilium daemonset will get restarted and the Clustermesh API deployment will get created. Execute the commands below to double-check the update action.
@@ -308,7 +308,7 @@ $ kubectl get pods,svc -n kube-system | grep -i clustermesh
 
 ## Step 4: Validate Cilium Cluster Mesh
 
-As we do not use the cilium CLI, to ensure the Cilium cluster mesh works as expected, we will exec into the cilium daemonset and check the required details.
+As we do not use the Cilium CLI, to ensure the Cilium cluster mesh works as expected, we will exec into the cilium daemonset and check the required details.
 
 ```bash
 $ kubectl get ds -n kube-system | grep -i cilium
@@ -394,11 +394,11 @@ With the cilium-health status command, you should be able to see all the nodes f
 
 Also, it might take a couple of minutes till the cilium-health status is available.
 
-If the time-out persist, have a look at the firewall rules and whether traffic between the clusters is allowed.
+If the time-out persists, have a look at the firewall rules and whether traffic between the clusters is allowed.
 :::
 
 :::warning
-The NodePort IP addresses set for the cluster mesh needs to be the IP addresses of the worker node instead of the master node. If they are the master node, the Cilium Cluster Mesh will not get deployed and we will get the below error.
+The NodePort IP addresses set for the cluster mesh need to be the IP addresses of the worker node instead of the master node. If they are the master node, the Cilium Cluster Mesh will not get deployed and we will get the below error.
 ```
 remote-etcd-cluster01                                                             4m25s ago      4s ago       22      failed to detect whether the cluster configuration is required: etcdserver: permission denied 
 ```
@@ -406,7 +406,7 @@ remote-etcd-cluster01                                                           
 
 ## Step 5: Hubble UI
 
-To start working with the Hubble UI we can use the `kubectl port-forward` of the Hubble UI service or update the existing `rke2-cilium` deployment on one of the nodes and expose the Hubble UI as a `NodePort` service. Just include the below in the `values_mesh01.yaml` or the `values_mesh02.yaml` file.
+To work with the Hubble UI we can use the `kubectl port-forward` of the Hubble UI service or update the existing `rke2-cilium` deployment on one of the nodes and expose the Hubble UI as a `NodePort` service. Just include the below in the `values_mesh01.yaml` or the `values_mesh02.yaml` file.
 
 ```yaml
   ui:
@@ -415,11 +415,11 @@ To start working with the Hubble UI we can use the `kubectl port-forward` of the
       type: NodePort
 ```
 
-More information about the RKE2 Cilium Helm Chart values, have a look [here](https://artifacthub.io/packages/helm/rke2-charts/rke2-cilium/1.15.500).
+For more information about the RKE2 Cilium Helm Chart values, have a look [here](https://artifacthub.io/packages/helm/rke2-charts/rke2-cilium/1.15.500).
 
 
 ## Conclusions
 
-That’s it! We performed a Cilium cluster mesh between two on-prem RKE2 clusters in just a few steps!
+This is it! We performed a Cilium cluster mesh between two on-prem RKE2 clusters in just a few steps! 🎉
 
-That’s a wrap for this post! 🎉 Thanks for reading! Stay tuned for more exciting updates!
+It's a wrap for this post! 🎉 Thanks for reading! Stay tuned for more exciting updates!

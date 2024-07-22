@@ -10,9 +10,9 @@ tags: [cilium,open-source,kubernetes,gitops,devops]
 
 In today's blog post, we will demonstrate an easy way of deploying and controlling [Cilium](https://docs.cilium.io/en/v1.14/) on an [EKS](https://aws.amazon.com/eks/) cluster with [Sveltos](https://github.com/projectsveltos). 
 
-<!--truncate-->
-
 As the majority of the documentation out there provides a step-by-step installation directly with the Helm chart commands, we decided to demonstrate a different approach, the GitOps approach, with the use of [Sveltos ClusterProfile](https://projectsveltos.github.io/sveltos/addons/addons/) CRD (Custom Resource Definition).
+
+<!--truncate-->
 
 We will utilise the Terraform [AWS EKS module](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest) to create an EKS cluster. Once the cluster is up and running, we will register it with Sveltos. Then, we will update the [`aws-core` daemonset](https://docs.aws.amazon.com/eks/latest/userguide/managing-vpc-cni.html) to support  ENI mode and remove the `kube-proxy` Kubernetes resources as Cilium will take over.
 
@@ -56,8 +56,9 @@ The easiest way to spin up an EKS cluster is by following the recommended traini
 
 - GitHub Repository: https://github.com/hashicorp/learn-terraform-provision-eks-cluster
 
-To execute the Terraform plan, a valid AWS Service Account should be available with the right permissions to create the required resources. For more information about the AWS Service Accounts, have a look here.
-To get the cluster kubeconfig and start interacting with the cluster, the AWS CLI is used. Modify and execute the command below.
+To execute the Terraform plan, a valid `AWS Service Account` should be available with the right permissions to create the required resources. For more information about the AWS Service Accounts, have a look [here](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html).
+
+To get the cluster `kubeconfig` and start interacting with the cluster, the **AWS CLI** is used. Modify and execute the command below.
 
 ```bash
 $ aws eks update-kubeconfig --region <the region the cluster created> --name <the name of the cluster>
@@ -69,7 +70,7 @@ The command will save the kubeconfig in the default directory `~/.kube/config`. 
 
 ## Step 2: Register Cluster with Sveltos
 
-Once we have access to the cluster, it is time to proceed with the Sveltos registration. As this is a cloud cluster, we need to ensure Sveltos has the right permissions to perform the Kubernetes deployments and add-ons. To do that, we will utilise `sveltosctl` and generate a new kubeconfig file.
+Once we have access to the cluster, it is time to proceed with the Sveltos cluster registration. As this is a cloud Kubernetes cluster, we need to ensure Sveltos has the **right set of permissions** to perform the Kubernetes deployments and add-ons. To do that, we will utilise `sveltosctl` and generate a new kubeconfig file.
 
 ### Generate Sveltos kubeconfig
 
@@ -98,7 +99,7 @@ If the namespace does not exist in the management cluster, the command will fail
 ```bash
 $ export KUBECONFIG=<Sveltos managament cluster> 
 
-$ kubectl get sveltosclusters -A
+$ kubectl get sveltosclusters -A --show-labels
 NAMESPACE        NAME         READY   VERSION                LABELS
 mgmt             mgmt         true    v1.28.9+rke2r1         sveltos-agent=present
 test             eks-test01   true    v1.28.10-eks-49c6de4   env=test,sveltos-agent=present
@@ -106,7 +107,7 @@ test             eks-test01   true    v1.28.10-eks-49c6de4   env=test,sveltos-ag
 
 ## Step 3: Update the EKS cluster
 
-As we would like to use Cilium with the Kube Proxy replacement and the [ENI](https://docs.aws.amazon.com/AmazonECS/latest/bestpracticesguide/networking-networkmode-awsvpc.html) mode enabled, we need toperform additional actions. As the `kube-proxy` daemonset is already installed, we have to remove all related resources and update the `aws-node` daemonset to support the ENI mode.
+As we would like to use Cilium with the Kube Proxy replacement and the [ENI](https://docs.aws.amazon.com/AmazonECS/latest/bestpracticesguide/networking-networkmode-awsvpc.html) mode enabled, we need to perform additional actions. As the `kube-proxy` daemonset is already installed, we have to remove all related resources and update the `aws-node` daemonset to support the ENI mode.
 
 ### Validation
 
@@ -173,7 +174,7 @@ The aws-node daemonset scaled down to 0 replicas.
 
 ### Step 4: Create Sveltos ClusterProfile
 
-It is time to create a Sveltos ClusterProfile and deploy **Cilium** to the EKS cluster with the label set to `env=test`. Following the Cilium [documentation](https://docs.cilium.io/en/v1.14/installation/k8s-install-helm/), we will enable the required Helm values for the `kube-proxy `replacement and the ENI mode.
+It is time to create a **Sveltos ClusterProfile** and deploy **Cilium** to the EKS cluster with the label set to `env=test`. Following the Cilium [documentation](https://docs.cilium.io/en/v1.14/installation/k8s-install-helm/), we will enable the required Helm values for the `kube-proxy `replacement and the ENI mode.
 
 ```yaml
 ---
@@ -207,11 +208,11 @@ spec:
         enabled: true
 ```
 
-The ClusterProfile will deploy Cilium CNI to any cluster with the cluster label set to `env=test`. It will then deploy the Cilium Helm chart in the `kube-system` namespace alongside with the kube-proxy replacement and the ENI mode enabled. Hubble is also enabled.
+The ClusterProfile will deploy Cilium CNI to any cluster with the cluster label set to `env=test`. It will then deploy the Cilium Helm chart in the `kube-system` namespace alongside the kube-proxy replacement and the ENI mode. Hubble is also enabled.
 
 ## Step 5: Deploy Cilium and Validate
 
-To see and evaluate the results, the Sveltos ClusterProfile will get deployed to the management cluster.
+To see and evaluate the results, the Sveltos ClusterProfile will be deployed to the management cluster.
 
 ```bash
 $ export KUBECONFIG=<Sveltos managament cluster>
@@ -300,7 +301,7 @@ Take advantage of the [Sveltos Templating](https://projectsveltos.github.io/svel
 
 ## Contact
 
-We are here to help! Whether you have questions, or issues or need assistance, our Slack channel is the perfect place for you. Click here to [join](https://app.slack.com/client/T0471SNT5CZ/C06UZCXQLGP) us.
+We are here to help! Whether you have questions, or issues or need assistance, our Slack channel is the perfect place for you. Click here to [join us](https://app.slack.com/client/T0471SNT5CZ/C06UZCXQLGP) us.
 
 ## 👏 Support this project
 
