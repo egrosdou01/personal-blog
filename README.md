@@ -1,6 +1,6 @@
 # Website
 
-This website is a simple built [Docusaurus](https://docusaurus.io/), a modern static website generator.
+This website is a built [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
 ### Installation
 
