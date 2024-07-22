@@ -132,7 +132,7 @@ const config = {
         darkTheme: prismThemes.dracula,
       },
       colorMode: {
-        defaultMode: 'dark',
+        defaultMode: 'light',
       },
     }),
     plugins: [[ require.resolve('docusaurus-lunr-search'), {
