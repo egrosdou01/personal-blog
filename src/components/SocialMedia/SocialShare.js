@@ -28,7 +28,7 @@ const SocialShare = ({ title, url }) => {
         <LinkedinIcon size={25} round />
       </LinkedinShareButton>
       <TwitterShareButton url={fullURL} title={title} className={styles.shareButton}>
-        <XIcon size={25} round /> {/* Changed to TwitterIcon */}
+        <XIcon size={25} round />
       </TwitterShareButton>
       <RedditShareButton url={fullURL} title={title} className={styles.shareButton}>
         <RedditIcon size={25} round />
