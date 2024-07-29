@@ -3,15 +3,15 @@ slug: rancher-rke2-cilium-azure
 title: Rancher RKE2 Cluster on Azure
 authors: [egrosdou01]
 date: 2024-07-26
-tags: [cilium,rke2,open-source,kubernetes,gitops,devops]
+tags: [Rancher,cilium,rke2,open-source,kubernetes,gitops,devops,azure]
 image: ./Rancher_RKE2_Cilium_Azure.jpg
 ---
 
 ## Introduction
 
-The last couple of days I have been working on a new use case installing [RKE2](https://docs.rke2.io/) clusters powered with [Cilium](https://docs.cilium.io/en/v1.15/) on [Azure cloud](https://azure.microsoft.com/en-us/get-started). The requirement at hand was to use a [Rancher](https://ranchermanager.docs.rancher.com/v2.8) instance and from there start deploying RKE2 clusters. After going through the official Rancher documentation, I have noticed that the instructions provided to pre-configure [Azure cloud](https://ranchermanager.docs.rancher.com/v2.8/how-to-guides/new-user-guides/launch-kubernetes-with-rancher/use-new-nodes-in-an-infra-provider/create-an-azure-cluster) are outdated.
+For the last couple of days, I have been working on a new use case installing [RKE2](https://docs.rke2.io/) clusters powered with [Cilium](https://docs.cilium.io/en/v1.15/) on [Azure Cloud](https://azure.microsoft.com/en-us/get-started). The requirement at hand was to use a [Rancher](https://ranchermanager.docs.rancher.com/v2.8) instance and from there start deploying RKE2 clusters. After going through the official Rancher documentation, I have noticed that the instructions provided to pre-configure [Azure Cloud](https://ranchermanager.docs.rancher.com/v2.8/how-to-guides/new-user-guides/launch-kubernetes-with-rancher/use-new-nodes-in-an-infra-provider/create-an-azure-cluster) are outdated.
 
-In today's blog post, we will cover all the required steps taken to configure the [Azure cloud free credits](https://azure.microsoft.com/en-us/free#all-free-services) to deploy RKE2 clusters with Cilium on that environment. Additionally, we will cover any limitations come with the `free credit` concept.
+In today's blog post, we will cover all the required steps taken to configure the [Azure cloud-free credits](https://azure.microsoft.com/en-us/free#all-free-services) to deploy RKE2 clusters with Cilium in that environment. Additionally, we will cover any limitations that come with the `free credit` concept.
 
 ![title image reading "Rancher RKE2 Cluster on Azure"](Rancher_RKE2_Cilium_Azure.jpg)
 
@@ -39,13 +39,11 @@ In today's blog post, we will cover all the required steps taken to configure th
 
 ### Rancher Server
 
-We do not concetrate on installing Rancher. If you are not sure how to install Rancher, have a look at the official documentation [here](https://ranchermanager.docs.rancher.com/getting-started/quick-start-guides) or go through the guide I created a couple of weeks back [here](https://medium.com/@eleni.grosdouli/rancher-on-eks-with-nginx-ingress-and-lets-encrypt-4f041fc1adae). 
+We do not concentrate on installing Rancher. If you are not sure how to install Rancher, have a look at the official documentation [here](https://ranchermanager.docs.rancher.com/getting-started/quick-start-guides) or go through the guide I created a couple of weeks back [here](https://medium.com/@eleni.grosdouli/rancher-on-eks-with-nginx-ingress-and-lets-encrypt-4f041fc1adae). 
 
 ### Azure Free Credits
 
-For this demonstration, we will use the Azure [free credits](https://azure.microsoft.com/en-us/free) offering. The approach taken is more than enough to give readers a free and good understanding on how to setup the Azure cloud environment to perform RKE2 deployments with Rancher.
-
-### Resources
+For this demonstration, we will use the Azure [free credits](https://azure.microsoft.com/en-us/free) offering. The approach taken is more than enough to give readers a free and good understanding of how to set up the Azure cloud environment to perform RKE2 deployments with Rancher.
 
 Ensure the below are satisfied.
 
@@ -54,18 +52,18 @@ Ensure the below are satisfied.
 
 ## Set up Azure Cloud Environment
 
-In this section, we will provide readers all the needed guidance on setting up their environment for the RKE2 deployment
+In this section, we will provide readers with all the needed guidance on setting up their environment for the RKE2 deployment
 
 ### Retrieve the Tenant ID
 
-The `Tenant ID` identifies which Azure Active Directory (AD) instance the application sits under. To retrieve the tenand ID, follow the steps below.
+The `Tenant ID` identifies which Azure Active Directory (AD) instance the application sits under. To retrieve the Tenant ID, follow the steps below.
 
 1. Login to Azure [portal](https://portal.azure.com/)
 1. Navigate to **Home**
 1. Search for `Microsoft Entra ID`
   ![title image reading "Microsoft Entra ID"](microsoft_entra_id.png)
 1. Navigate to **Manage > Properties**
-1. Grab the `Tenant ID` once the new windows appears
+1. Grab the `Tenant ID` once the new windows appear
 
 ### Create a Rancher App Registration
 
@@ -76,8 +74,8 @@ Azure App Registration is the process of registering an application with Azure A
 1. Choose the below details:
     - `Name`: What is the name your application will have
     - `Supported account types`: In my case, I chose the first one, "Accounts in this organizational directory only (Default Directory only - Single tenant)"
-    - `Redirect URI (optional)`: set `Web` and left the `Sign-on URL` empty or add your own URI
-1. Click the **"Register"** button to create the application
+    - `Redirect URI (optional)`: set `Web` and leave the `Sign-on URL` empty or add your own URI
+1. Click the **Register** button to create the application
 
     ![title image reading "App Registration"](app_registration.png)
 
@@ -87,7 +85,7 @@ Azure App Registration is the process of registering an application with Azure A
 1. Navigate to **Home > App registrations > App name**
 1. Navigate to **Manage > Certificates & secrets**
   ![title image reading "Client Secret"](client_secret.png)
-1. Click on the **"+ New client secret"**
+1. Click on the **+ New client secret**
 1. Provide a `description` and an `expiry date`
 1. Click **+ Add**
 1. Copy the `Value` and proceed with the configuraition
@@ -101,34 +99,34 @@ Azure App Registration is the process of registering an application with Azure A
     ![title image reading "IAM"](add_role_assigment.png)
 1. Open the `Privileged administrator roles` tab
 1. For Role, select `Contributor`
-1. Click on **"Next"**
-1. Members and "+ Select members" and then choose or type for "Rancher". If your application name is something else, provide the application name created in a previous step 
+1. Click on **Next**
+1. Members and **+ Select members** and then choose or type for `Rancher`. If your application name is something else, provide the application name created in a previous step 
 1. **Review + assing**
 1. Proceed with the creation
 
 ## Azure Free Account Limitations
 
-Find below some of the limitations spotted with the `free credtis` subscription.
+Find below some of the limitations spotted with the `free-credti` subscription.
 
-1. You cannnot have more than **one** resource pools
+1. You cannot have more than **one** resource pools
 1. You cannot have more than **3** Public IP addresses
-1. You cannot create a resource pool with `VM Size` **greater than** `Standard_D2_v2`
+1. You cannot create a resource pool with a `VM Size` **greater than** `Standard_D2_v2`
 
 ## Set up Rancher Cloud Credentials
 
-Once we have the Azure environment ready, we can move on with Rancher. The first thing we have to do is to create `Azure Cloud Credentials`. The cloud credentials will be used to provision cluster or can be used in other node templates.
+Once we have the Azure environment ready, we can move on with Rancher. The first thing we have to do is to create `Azure Cloud Credentials`. The cloud credentials will be used to provision clusters or can be used in other node templates.
 
 1. Login to Rancher
-1. Navigiate to **Home > Cluster management ![title image reading "Cluster Management"](cluster_management.png) > Cloud Credentials > Create > Choose Azure**
+1. Navigate to **Home > Cluster management ![title image reading "Cluster Management"](cluster_management.png) > Cloud Credentials > Create > Choose Azure**
 1. Provide a `name`, `tenant ID` (**Home > Subscriptions**), `clientID` (**Home > App registrations > Rancher > copy the Application (client) ID**), `client secret` (**Home > App registrations > App name > manage > certificates & secrets**)
-1. Click the **"Create"** button and ensure no error appear on the screen
+1. Click the **"Create"** button and ensure no error appears on the screen
 
 
 ## Create an RKE2 cluster with Cilium
 
 It is time to use the Azure cloud credentials to create an RKE2 cluster on Azure with Cilium.
 
-1. Login to Rancher
+1. Login to the **Rancher UI**
 1. Navigiate to **Home > Cluster management ![title image reading "Cluster Management"](cluster_management.png) > Create > ensure RKE2 is selected > Choose Azure**
 1. The `Cloud Credentials` field will get populated automatically. Fill out the details below.
     - `Cluster Name`: Set a cluster name
@@ -143,7 +141,7 @@ It is time to use the Azure cloud credentials to create an RKE2 cluster on Azure
       - `Container Network`: Choose **Cilium**
         ![title image reading "Azure RKE2 Cluster Page 02"](azure_rke2_page02.png)
         :::tip
-        You can leave the rest of the configuration as default. However, if you want to enable Cilium with `kube-proxy` replacement enabled, you can update the cluster via editing the YAML version. This can be done by clicking the `Edit as YAML` button at the bottom right hand side.
+        We can leave the rest of the configuration as default. However, if we want to enable Cilium with `kube-proxy` replacement, we can update the cluster by editing the YAML configuration instead. This can be done by clicking the `Edit as YAML` button at the bottom right-hand side.
         :::
     - Continue with the **Cluster Configuration > Advanced**
       - `Additional Controller Manager Args`: Set `--configure-cloud-routes=false`
@@ -158,10 +156,9 @@ After 20 minutes:
 :::
 
 
-
 ## RKE2 Cluster Validation
 
-Now that the RKE2 cluster is up and running, lets perform some validation steps to ensure the cluster is working as expected.
+Now that the RKE2 cluster is up and running, let's perform some validation steps to ensure the cluster is working as expected.
 
 ```bash
 $ kubectl get nodes -o wide
@@ -250,6 +247,6 @@ Modules Health:          Stopped(0) Degraded(0) OK(11)
 
 ## Conclusions
 
-This is it! We performed an RKE2 cluster with Cilium using the Rancher UI in just a few steps and clicks. 🎉
+This is it! We performed an RKE2 cluster with Cilium using the Rancher UI in just a few clicks. 🎉
 
 It's a wrap for this post! 🎉 Thanks for reading! Stay tuned for more exciting updates!
