@@ -45,9 +45,9 @@ const config = {
           showReadingTime: true,
           blogTitle: 'Eleni Blog',
           blogDescription: 'Eleni Blog',
-          postsPerPage: 'ALL',
-          blogSidebarTitle: 'All posts',
-          blogSidebarCount: 'ALL',
+          postsPerPage: 10,
+          blogSidebarTitle: 'Recent posts',
+          blogSidebarCount: 5,
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -74,7 +74,8 @@ const config = {
           //   position: 'left',
           //   label: 'Tutorial',
           // },
-          {to: '/blog', label: 'Blog', position: 'left'},
+          {to: 'blog', label: 'Blog', position: 'left'},
+          {to: 'talks', label: 'Talks', position: 'left'},
           {
             href: 'https://github.com/egrosdou01',
             label: 'GitHub',
@@ -120,7 +121,7 @@ const config = {
             items: [
               {
                 label: 'Blog',
-                to: '/blog',
+                to: 'blog',
               },
             ],
           },
