@@ -417,6 +417,11 @@ To work with the Hubble UI we can use the `kubectl port-forward` of the Hubble U
 
 For more information about the RKE2 Cilium Helm Chart values, have a look [here](https://artifacthub.io/packages/helm/rke2-charts/rke2-cilium/1.15.500).
 
+## ✉️ Contact
+
+If you have any questions, feel free to get in touch! You can use the `Discussions` option found [here](https://github.com/egrosdou01/personal-blog/discussions) or reach out to me on any of the social media platforms provided. 😊
+
+We look forward to hearing from you!
 
 ## Conclusions
 

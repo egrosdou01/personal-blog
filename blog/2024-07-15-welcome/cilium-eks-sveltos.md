@@ -3,6 +3,7 @@ slug: cilium-eks-sveltos
 title: Cilium on EKS with Sveltos
 authors: [egrosdou01]
 date: 2024-07-15
+image: ./cilium_sveltos_eks.jpg
 tags: [cilium,open-source,kubernetes,gitops,devops]
 ---
 
@@ -12,13 +13,11 @@ In today's blog post, we will demonstrate an easy way of deploying and controlli
 
 As the majority of the documentation out there provides a step-by-step installation directly with the Helm chart commands, we decided to demonstrate a different approach, the GitOps approach, with the use of [Sveltos ClusterProfile](https://projectsveltos.github.io/sveltos/addons/addons/) CRD (Custom Resource Definition).
 
+![title image reading "Cilium on EKS with Sveltos Diagram"](cilium_sveltos_eks.jpg)
+
 <!--truncate-->
 
 We will utilise the Terraform [AWS EKS module](https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest) to create an EKS cluster. Once the cluster is up and running, we will register it with Sveltos. Then, we will update the [`aws-core` daemonset](https://docs.aws.amazon.com/eks/latest/userguide/managing-vpc-cni.html) to support  ENI mode and remove the `kube-proxy` Kubernetes resources as Cilium will take over.
-
-## Diagram
-
-![Cilium, Sveltos, EKS](./cilium_sveltos_eks.jpg)
 
 ## Lab Setup
 

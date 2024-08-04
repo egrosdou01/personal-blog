@@ -33,4 +33,12 @@ sveltos:
 rke2:
   label: RKE2
   permalink: /rke2
-  description: Rancher Kubernetes Engine 2
+  description: Rancher Kubernetes Engine 2 (RKE2)
+rancher:
+  label: Rancher
+  permalink: /rancher
+  description: Rancher
+azure:
+  label: Azure
+  permalink: /azure
+  description: Azure Cloud
