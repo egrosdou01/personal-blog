@@ -42,3 +42,7 @@ azure:
   label: Azure
   permalink: /azure
   description: Azure Cloud
+opentofu:
+  label: OpenTofu
+  permalink: /opentofu
+  description: OpenTofu is a fork of Terraform
