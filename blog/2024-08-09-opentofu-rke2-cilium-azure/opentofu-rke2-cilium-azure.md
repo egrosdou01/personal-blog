@@ -223,7 +223,6 @@ resource "rancher2_machine_config_v2" "nodes" {
 
 # RKE2 configuration
 resource "rancher2_cluster_v2" "rke2" {
-  # for_each = var.kube_vip
   annotations           = var.rancher_env.cluster_annotations
   kubernetes_version    = var.rancher_env.rke2_version
   labels                = var.rancher_env.cluster_labels
@@ -356,33 +355,43 @@ variable "rancher2_token_key" {
   type        = string
 }
 
-variable "rke2_ssh_public_key" {
-  description = "RKE2 cluster SSH public key"
-  type        = string
-}
-
-variable "rancher_env" {
-  description = "Rancher environment needed variables"
-  type = object({
-    cluster_annotations = map(string)
-    cluster_labels      = map(string)
-    rke2_version        = string
-    cluster_id          = string
-    network_policy      = bool
-  })
-}
-
-variable "rke_cluster_cidr" {
-  description = "RKE2 cluster CIDR prefix"
-  type        = string
-}
-
-variable "rke_service_cidr" {
-  description = "RKE2 service CIDR prefix"
-  type        = string
-}
+...
 
 ```
+### terraform.tfvars
+
+The file holds the input for the resource creation. Depending on how the `vraibles.tf` file looks like, we should set a similar structure to define the variables initialisation.
+
+```hcl
+
+```
+
+## Execution
+
+To plan and apply the resources, use the commands listed below.
+
+```bash
+
+$ tofu init
+
+$ tofu plan
+
+$ tofu apply
+
+```
+
+:::note
+When performing the `tofu init` command, I received the below warning.
+
+```bash
+- Installing rancher/rancher2 v4.1.0...
+- Installed rancher/rancher2 v4.1.0. Signature validation was skipped due to the registry not containing GPG keys for this provider
+```
+
+I raised a new `GitHub` issue with the Rancher2 Provider.
+:::
+
+The above will first create the Azure Cloud Credentials in the Rancher server and then proceed with the RKE2 cluster creation. The `tofu apply` command might take up to 15 min. Just wait for it to complete.
 
 ## ✉️ Contact
 
