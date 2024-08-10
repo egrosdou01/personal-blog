@@ -9,7 +9,7 @@ tags: [sveltos,cilium,open-source,kubernetes,gitops,devops]
 
 ## Introduction
 
-Have you ever wondered how to dynamically instantiate Kubernetes resources before deploying them to a cluster? What if I tell you there is an easy way to do it. Sveltos lets you define add-ons and applications using [templates](https://projectsveltos.github.io/sveltos/template/intro_template/). Before deploying any resource down the **managed** clusters, Sveltos instantiates the templates using information gathered from the **management** cluster.
+Have you ever wondered how to dynamically instantiate Kubernetes resources before deploying them to a cluster? What if I tell you there is an easy way to do it. [Sveltos](https://github.com/projectsveltos) lets you define add-ons and applications using [templates](https://projectsveltos.github.io/sveltos/template/intro_template/). Before deploying any resource down the **managed** clusters, Sveltos instantiates the templates using information gathered from the **management** cluster.
 
 In todays blog post I will like to demonstrate how to create a Cilium cluster mesh between two clusters using the Sveltos templating feature to instantiate the Cilium helm chart definition.
 
@@ -56,7 +56,13 @@ Once we have our Civo clusters ready, it is time to proceed with the Sveltos clu
 ```bash
 $ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
     --kubeconfig=<path to Sveltos file with Kubeconfig> \
-    --labels=cilium-zone01
+    --labels=key=value
+```
+
+```bash
+$ sveltosctl register cluster --namespace=civo --cluster=mesh01 \
+    --kubeconfig=/home/test/mesh01.yaml \
+    --labels=cilium=zone01
 ```
 
 We will register the Civo clusters with Sveltos on the mentioned **namespace**, and **name** and will attach the cluster **labels** `cilium=zone01` and `cilium=zone02` respectively.
