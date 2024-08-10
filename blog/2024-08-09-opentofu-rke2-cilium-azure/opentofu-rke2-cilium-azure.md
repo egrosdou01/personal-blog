@@ -93,12 +93,12 @@ In your favourite IDE, create a new project and slowly start populating the belo
 
 ### File structure
 
-- `cluster.tf`: Contains the resource blocks that define the resources to be created in Azure cloud
+- `main.tf`: Contains the resource blocks that define the resources to be created in Azure cloud
 - `variables.tf`: Contains the variable declaration used in the resource blocks
 - `providers.tf`: Contains the required providers used in the resource blocks
 - `data.tf`: Contains a number of data retrived from the outside and use it through the resource creation
 - `output.tf`: Contains the output that needs to be generated on successful completion of the OpenTofu plan/apply
-- `*.tfvars`: Contains the environment-specific default values of variables.
+- `*.tfvars`: Contains the default values of the specified variables
 
 ## providers.tf
 
@@ -185,7 +185,7 @@ output "rancher_cluster_id" {
 }
 ```
 
-## cluster.tf
+## main.tf
 
 ```hcl
 # Random ID to be appended to the node creation
