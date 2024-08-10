@@ -13,6 +13,8 @@ In a [previous post](../2024-07-26-rancher-rke2-azure/rancher-rke2-cilium-azure.
 `OpenTofu` is a fork of [Terraform](https://www.terraform.io/). It is an open-source project, community-driven, and managed by the Linux Foundation. If you want to get familiar with what `OpenTofu` is and how to get started, check out the link [here](https://opentofu.org/docs/intro/core-workflow/).
 
 Additionally, we will demonstrate how easy it is to customise the [Cilium](https://docs.cilium.io/en/stable/) configuration and enable [kube-vip](https://kube-vip.io/) for LoadBalancer services from the HCL (HashiCorp Configuration Language) definition.
+
+![title image reading "OpenTofu Rancher RKE2 Cluster on Azure"](OpenTofu_Rancher_Cilium_Azure.jpg)
 <!--truncate-->
 
 ## Lab Setup
