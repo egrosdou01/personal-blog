@@ -10,9 +10,9 @@ tags: [cilium,rke2,open-source,kubernetes,gitops,devops,opentofu]
 
 In a [previous post](../2024-07-26-rancher-rke2-azure/rancher-rke2-cilium-azure.md), we covered how to create an [RKE2](https://docs.rke2.io/) cluster on [Azure Cloud](https://azure.microsoft.com/en-us/get-started) using the [cloud-free credits](https://azure.microsoft.com/en-us/free#all-free-services) from the **Rancher UI**. As this is a convenient approach to get started with Rancher, in today's post we will demonstrate how to use [OpenTofu](https://opentofu.org/) to automate the deployment.
 
-`OpenTofu` is a fork of [Terraform](https://www.terraform.io/). It is an open source project, community-driven, and managed by the Linux Foundation. If you want to get familiar with what `OpenTofu` is and how to get started, check out the link [here](https://opentofu.org/docs/intro/core-workflow/).
+`OpenTofu` is a fork of [Terraform](https://www.terraform.io/). It is an open-source project, community-driven, and managed by the Linux Foundation. If you want to get familiar with what `OpenTofu` is and how to get started, check out the link [here](https://opentofu.org/docs/intro/core-workflow/).
 
-Additionally, we will demonstrate how easy it is to customise the [Cilium](https://docs.cilium.io/en/stable/) configuration and enable [kube-vip](https://kube-vip.io/) for LoadBalancer services from the HCL (HashiCorp Configuration Language) code definition.
+Additionally, we will demonstrate how easy it is to customise the [Cilium](https://docs.cilium.io/en/stable/) configuration and enable [kube-vip](https://kube-vip.io/) for LoadBalancer services from the HCL (HashiCorp Configuration Language) definition.
 <!--truncate-->
 
 ## Lab Setup
@@ -29,6 +29,7 @@ Additionally, we will demonstrate how easy it is to customise the [Cilium](https
 |    Deployment     | Version  |
 +-------------------+----------+
 |      Cilium       | 1.15.500 |
+|      OpenTofu     | v1.8.1   |
 +-------------------+----------+
 
 ```
@@ -41,7 +42,7 @@ We do not concentrate on installing `Rancher`. If you are not sure how to instal
 
 ### Azure Free Credits
 
-For this demonstration, we will use the Azure [free credits](https://azure.microsoft.com/en-us/free) offering. The approach taken is more than enough to provide readers with a good understanding of how to set up the Azure cloud environment to perform RKE2 deployments with Rancher without spending money for the deployment.
+For this demonstration, we will use the Azure [free credits](https://azure.microsoft.com/en-us/free) offering. The approach taken allows readers to understand how to set up the Azure cloud environment to perform RKE2 deployments with Rancher without spending money outside the free-credits offering.
 
 Ensure the below are satisfied.
 
@@ -78,22 +79,22 @@ Before we even begin with the actual coding, it is a nice opportunity to familia
     ![title image reading "Rancher2 Terraform Provider"](rancher2_tf_provider.png)
 
 :::tip
-Check out the example sections of the resources available and the different Cloud providers supported.
+Check out the example sections of the resources available and the supported Cloud providers.
 :::
 
 ### Step 0.3: Choose Integrated Development Environment (IDE)
 
-As with any other project, we will use [Git](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F) to store our code in a central location and [Visual Studio Code](https://code.visualstudio.com/) to perform the coding. Choose your favourite source control system and IDE, and let's dive into the next sections! :)
+As with any other project, we will use [Git](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F) to store our code in a central location and [Visual Studio Code](https://code.visualstudio.com/) to perform the coding. Choose your favourite source control system and IDE, and let's dive into the next sections! 🚀
 
 ## Outline Project Structure
 
-Like with any Terraform project, we will create a number of `.tf` to store the Infrastructure as Code (IaC) definitions. For best practices, have a look at the [link](https://spacelift.io/blog/opentofu-tutorial#opentofu-best-practices).
+Like with any Terraform project, we will create a number of `.tf` files to store the Infrastructure as Code (IaC) definitions. For best practices, have a look at the [link](https://spacelift.io/blog/opentofu-tutorial#opentofu-best-practices).
 
-In your favourite IDE, create a new project and slowly start populating the below file structure.
+In your favourite IDE, create a new project and create the below file structure.
 
 ### File structure
 
-- `main.tf`: Contains the resource blocks that define the resources to be created in Azure cloud
+- `main.tf`: Contains the resource blocks that define the resources to be created in the Azure cloud
 - `variables.tf`: Contains the variable declaration used in the resource blocks
 - `providers.tf`: Contains the required providers used in the resource blocks
 - `data.tf`: Contains a number of data retrived from the outside and use it through the resource creation
@@ -128,7 +129,7 @@ provider "rancher2" {
 ```
 
 :::tip
-It is a good practice to avoid specifying sensitive data in the `variables.tf` file. From the `providers.tf` definition we can see the `rancher2_api_url` and `rancher2_token_key` should be provided as variables. We can have a file with the required information, export the variable name and values and use them by setting the [source](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-linux) pointing to the file before performing any IaC actions.
+It is a good practice to avoid specifying sensitive data in the `variables.tf` file. The `providers.tf` file expects the `rancher2_api_url` and `rancher2_token_key` variables. Following the best practices, we can have a file that exports the required variable name and value. From a terminal window we set the [source](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-linux) pointing to the file before performing any IaC actions.
 :::
 
 :::note
@@ -137,7 +138,7 @@ The `required_providers` block is used to specify and configure the providers ne
 
 ## data.tf
 
-The `data.tf` file holds the code to downlod relevant information about the kube-vip installation. The information will be used later on in the `cluster.tf` file while defining the the RKE2 cluster configuration.
+The `data.tf` file holds the code to downlod relevant information about the kube-vip installation. The information will be used later on in the `main.tf` file while defining the RKE2 cluster configuration.
 
 ```hcl
 # Download the kube-vip required RBAC manisfest
@@ -171,7 +172,7 @@ data "rancher2_project" "system" {
 
 ## output.tf
 
-In the file we can speficy anything we want based on the use case at hand. For this demonmstration, let's keep it simple. We would only display to the console the RKE2 `cluster-name` and `cluster-id`.
+In the file we can speficy anything we want based on the use case at hand. For this demonmstration, we keep it simple. We would display only the RKE2 `cluster-name` and `cluster-id`.
 
 ```hcl
 # Display the RKE2 Cluster Name
@@ -187,12 +188,22 @@ output "rancher_cluster_id" {
 
 ## main.tf
 
+The file contains the logic for creating virtual machines and installing RKE2 on top. We will break the `main.tf` file into smaller pieces and try to go through them in more detail.
+
+### Random ID for each cluster and nodes
+
 ```hcl
-# Random ID to be appended to the node creation
+# Random ID to be appended to the cluster and nodes
 resource "random_id" "cluster_random_name" {
   byte_length = 3
 }
+```
 
+### Define the Azure Cloud Credentials
+
+It is a requirement to have valid Azure cloud credentials before we proceed with the RKE2 installation. If you are unsure how to get the below variable details from your subscription, have a look at my previous post [here](../2024-07-26-rancher-rke2-azure/rancher-rke2-cilium-azure.md#set-up-rancher-cloud-credentials).
+
+```hcl
 # Create the Azure Cloud Credentials in Rancher
 resource "rancher2_cloud_credential" "azure_creds" {
   name = "Azure Credentials"
@@ -202,8 +213,14 @@ resource "rancher2_cloud_credential" "azure_creds" {
     subscription_id = var.azure_env.az_subscription_id
   }
 }
+```
 
-# Create the different nodes for RKE2 (control-plane and worker node)
+### Define the Machine Condifugration
+
+The below resource will create the required virtual machines for the RKE2 cluster. Here, we define two types of nodes, the controller and the worker node. They could have the same or different hardware specifications based on the use case scenario that needs to get covered.
+
+```hcl
+# Create the different nodes for RKE2 (controller and worker node)
 resource "rancher2_machine_config_v2" "nodes" {
   for_each      = var.node
   generate_name = replace(each.value.name, "_", "-")
@@ -220,7 +237,11 @@ resource "rancher2_machine_config_v2" "nodes" {
     size                 = each.value.agent_type
   }
 }
+```
 
+### Define the RKE2 Condifugration
+
+```hcl
 # RKE2 configuration
 resource "rancher2_cluster_v2" "rke2" {
   annotations           = var.rancher_env.cluster_annotations
@@ -230,6 +251,7 @@ resource "rancher2_cluster_v2" "rke2" {
   name                  = var.rancher_env.cluster_id
 
   rke_config {
+    # You can create a Terraform template and polulate the values of the file based on the variables defined below
     additional_manifest = templatefile("${path.module}/files/kube-vip-daemonset-original.tfmpl",
       {
         int_name                = var.kube_vip.int_name
@@ -240,14 +262,15 @@ resource "rancher2_cluster_v2" "rke2" {
         kube_vip_cloud_provider = data.http.kube_vip_cloud_provider.response_body
     })
 
+    # Define the Helm chart values for the Cilium installation
     chart_values = <<-EOF
       rke2-cilium:
         k8sServiceHost: 127.0.0.1
         k8sServicePort: 6443
-        kubeProxyReplacement: true
+        kubeProxyReplacement: true # Enable Cilium with Kube-Proxy replacement on
         operator:
           replicas: 1
-        hubble:
+        hubble: # Enable the Cilium Hubble UI (https://docs.cilium.io/en/v1.15/gettingstarted/hubble/)
           enabled: true
           peerService:
             clusterDomain: cluster.local
@@ -262,23 +285,25 @@ resource "rancher2_cluster_v2" "rke2" {
             enabled: true
       EOF
 
+    # Define the Rancher global settings for the whole cluster
     machine_global_config = <<EOF
-      cni: "cilium"
+      cni: "cilium" 
       cluster-cidr: ${var.rke_cluster_cidr}
       service-cidr: ${var.rke_service_cidr}
       disable-kube-proxy: true
       etcd-expose-metrics: false
       EOF
 
+    # Sepcify the role of each node based on the name of the node
     dynamic "machine_pools" {
       for_each = var.node
       content {
         cloud_credential_secret_name = rancher2_cloud_credential.azure_creds.id
-        control_plane_role           = machine_pools.key == "ctl_plane" ? true : false
-        etcd_role                    = machine_pools.key == "ctl_plane" ? true : false
+        control_plane_role           = machine_pools.key == "controller" ? true : false
+        etcd_role                    = machine_pools.key == "controller" ? true : false
         name                         = machine_pools.value.name
         quantity                     = machine_pools.value.quantity
-        worker_role                  = machine_pools.key != "ctl_plane" ? true : false
+        worker_role                  = machine_pools.key != "controller" ? true : false
 
         machine_config {
           kind = rancher2_machine_config_v2.nodes[machine_pools.key].kind
@@ -296,7 +321,7 @@ resource "rancher2_cluster_v2" "rke2" {
 
 ## variables.tf
 
-Outline how the variables used in the `cluster.tf` file should look like. If required, perform additional validations to the code.
+Outline how the variables used in the `main.tf` file should look like. If required, perform additional validations to the code.
 
 ```hcl
 variable "azure_env" {
@@ -320,7 +345,7 @@ variable "kube_vip" {
 variable "node" {
   description = "Two RKE2 nodes to be configured"
   type = object({
-    ctl_plane = object({
+    controller = object({
       name           = string
       agent_disk     = optional(number)
       image          = optional(string)
@@ -355,20 +380,38 @@ variable "rancher2_token_key" {
   type        = string
 }
 
-...
-
 ```
 ### terraform.tfvars
 
-The file holds the input for the resource creation. Depending on how the `vraibles.tf` file looks like, we should set a similar structure to define the variables initialisation.
+The file holds the input for the resource creation. Depending on how the `variables.tf` file looks like, we should set a similar structure to define the variables initialisation.
 
 ```hcl
+kube_vip = {
+  int_name         = "eth0"
+  kube_vip_address = "x.x.x.x"
+  kube_vip_pool    = "x.x.x.x-x.x.x.x"
+}
 
+node = {
+  controller = { name = "controller", quantity = 1, agent_disk = 30, image = "canonical:UbuntuServer:18.04-LTS:latest", location = "westus", resource_group = "rancher-rg", storage_type = "Standard_LRS", agent_type = "Standard_D2_v2" },
+  worker  = { name = "worker", quantity = 1, agent_disk = 30, image = "canonical:UbuntuServer:18.04-LTS:latest", location = "westus", resource_group = "rancher-rg", storage_type = "Standard_LRS", agent_type = "Standard_D2_v2" }
+}
+
+rancher_env = {
+  cluster_annotations = { "rke2" = "demo" }
+  cluster_labels      = { "rke2" = "azure-demo" }
+  rke2_version     = "v1.28.11+rke2r1"
+  cluster_id       = "eleni-azure-01"
+  network_policy   = "false"
+}
+
+rke_cluster_cidr   = "10.42.0.0/16"
+rke_service_cidr   = "10.43.0.0/16"
 ```
 
 ## Execution
 
-To plan and apply the resources, use the commands listed below.
+To plan and apply the resources, use the below commands.
 
 ```bash
 
@@ -388,10 +431,56 @@ When performing the `tofu init` command, I received the below warning.
 - Installed rancher/rancher2 v4.1.0. Signature validation was skipped due to the registry not containing GPG keys for this provider
 ```
 
-I raised a new `GitHub` issue with the Rancher2 Provider.
+I raised a new `GitHub` [issue](https://github.com/rancher/terraform-provider-rancher2/issues/1385) with the Terraform Rancher2 Provider.
 :::
 
-The above will first create the Azure Cloud Credentials in the Rancher server and then proceed with the RKE2 cluster creation. The `tofu apply` command might take up to 15 min. Just wait for it to complete.
+The above will first create the Azure Cloud Credentials in the Rancher instance, then continue with the RKE2 cluster creation. The `tofu apply` command might take up to 10 min. Just wait for it to complete.
+
+## Validation
+
+If the `tofu apply` command completes successfully, we should have a cluster with two nodes. One `controller` and one `worker` node in the `westus` region.
+
+![title image reading "Rancher2 Terraform Provider"](rke2_opentofu_azure.png)
+
+```bash
+$ kubectk get nodes
+NAME                                       STATUS   ROLES                       AGE     VERSION
+eleni-azure-01-controller-49abc099-ftvnv   Ready    control-plane,etcd,master   11m     v1.28.11+rke2r1
+eleni-azure-01-worker-87b90346-swd64       Ready    worker                      7m59s   v1.28.11+rke2r1
+
+$ kubectk get pods -n kube-system
+NAME                                                                READY   STATUS      RESTARTS   AGE
+cilium-5rfh4                                                        1/1     Running     0          11m
+cilium-operator-6bd79b68b5-ch979                                    1/1     Running     0          11m
+cilium-vmt9d                                                        1/1     Running     0          8m8s
+cloud-controller-manager-eleni-azure-01-controller-49abc099-ftvnv   1/1     Running     0          11m
+etcd-eleni-azure-01-controller-49abc099-ftvnv                       1/1     Running     0          11m
+helm-install-rke2-cilium-kqmkc                                      0/1     Completed   0          11m
+helm-install-rke2-coredns-m5f8f                                     0/1     Completed   0          11m
+helm-install-rke2-ingress-nginx-vzdps                               0/1     Completed   0          11m
+helm-install-rke2-metrics-server-5t4sj                              0/1     Completed   0          11m
+helm-install-rke2-snapshot-controller-crd-jvdtd                     0/1     Completed   0          11m
+helm-install-rke2-snapshot-controller-zpkhv                         0/1     Completed   0          11m
+helm-install-rke2-snapshot-validation-webhook-6qlpx                 0/1     Completed   0          11m
+hubble-relay-6f89c7f794-r2scw                                       1/1     Running     0          11m
+hubble-ui-6969854c48-phv2w                                          2/2     Running     0          11m
+kube-apiserver-eleni-azure-01-controller-49abc099-ftvnv             1/1     Running     0          11m
+kube-controller-manager-eleni-azure-01-controller-49abc099-ftvnv    1/1     Running     0          11m
+kube-scheduler-eleni-azure-01-controller-49abc099-ftvnv             1/1     Running     0          11m
+kube-vip-5vlxw                                                      1/1     Running     0          11m
+kube-vip-cloud-provider-85fd9b9cf7-n24fd                            1/1     Running     0          11m
+rke2-coredns-rke2-coredns-84b9cb946c-5wch4                          1/1     Running     0          11m
+rke2-coredns-rke2-coredns-84b9cb946c-zfkm5                          1/1     Running     0          8m5s
+rke2-coredns-rke2-coredns-autoscaler-b49765765-4gkwf                1/1     Running     0          11m
+rke2-ingress-nginx-controller-hljpx                                 1/1     Running     0          6m15s
+rke2-metrics-server-655477f655-v2j6g                                1/1     Running     0          6m38s
+rke2-snapshot-controller-59cc9cd8f4-66942                           1/1     Running     0          6m39s
+rke2-snapshot-validation-webhook-54c5989b65-zqxgz                   1/1     Running     0          6m38s
+```
+
+## Delete Resources
+
+It is very easy to delete the resources created, simply perform the `tofu destroy` and confirm the action. The deletion of the resources will take up to 2 minutes.
 
 ## ✉️ Contact
 
@@ -401,6 +490,6 @@ We look forward to hearing from you!
 
 ## Conclusions
 
-This is it! We performed a Cilium cluster mesh between two on-prem RKE2 clusters in just a few steps! 🎉
+This is it! Automate the creation of RKE2 clusters in Azure with OpenTofu! 🎉
 
 It's a wrap for this post! 🎉 Thanks for reading! Stay tuned for more exciting updates!
