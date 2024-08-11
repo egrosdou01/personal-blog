@@ -2,7 +2,7 @@
 slug: opentofu-rke2-cilium-azure.md
 title: "OpenTofu: Deploy RKE2 Cluster with Cilium on Azure"
 authors: [egrosdou01]
-date: 2024-08-09
+date: 2024-08-11
 tags: [cilium,rke2,open-source,kubernetes,gitops,devops,opentofu]
 ---
 
