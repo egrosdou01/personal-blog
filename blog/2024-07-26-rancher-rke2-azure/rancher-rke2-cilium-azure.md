@@ -106,7 +106,7 @@ Azure App Registration is the process of registering an application with Azure A
 
 ## Azure Free Account Limitations
 
-Find below some of the limitations spotted with the `free-credti` subscription.
+Find below some of the limitations spotted with the `free-credit` subscription.
 
 1. You cannot have more than **one** resource pools
 1. You cannot have more than **3** Public IP addresses
