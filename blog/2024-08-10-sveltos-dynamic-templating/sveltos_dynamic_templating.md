@@ -9,9 +9,9 @@ tags: [sveltos,cilium,open-source,kubernetes,gitops,devops]
 
 ## Introduction
 
-Have you ever wondered how to dynamically instantiate Kubernetes resources before deploying them to a cluster? What if I tell you there is an easy way to do it. [Sveltos](https://github.com/projectsveltos) lets you define add-ons and applications using [templates](https://projectsveltos.github.io/sveltos/template/intro_template/). Before deploying any resource down the **managed** clusters, Sveltos instantiates the templates using information gathered from the **management** cluster.
+Have you ever wondered how to dynamically instantiate Kubernetes resources before deploying them to a cluster? What if I tell you there is an easy way to do it? [Sveltos](https://github.com/projectsveltos) lets you define add-ons and applications using [templates](https://projectsveltos.github.io/sveltos/template/intro_template/). Before deploying any resource down the **managed** clusters, Sveltos instantiates the templates using information gathered from the **management** cluster.
 
-In todays blog post I will like to demonstrate how to create a Cilium cluster mesh between two clusters using the Sveltos templating feature to instantiate the Cilium helm chart definition.
+In today's blog post, we will demonstrate how to form a Cilium cluster mesh between two clusters using the Sveltos templating to instantiate the Cilium helm charts.
 
 ![title image reading "Sveltos Templating Cilium"](Sveltos_Templating_Cilium.jpg)
 
@@ -46,12 +46,12 @@ To follow along with the blog post, ensure the below are satisfied.
 1. sveltosctl installed
 
 :::note
-If you are not aware how to install Sveltos on a Kubernetes cluster, follow the instruction mentioned [here](https://projectsveltos.github.io/sveltos/getting_started/install/install/).
+If you are not aware of how to install Sveltos on a Kubernetes cluster, follow the instructions mentioned [here](https://projectsveltos.github.io/sveltos/getting_started/install/install/).
 :::
 
 ## Step 1: Register Clusters with Sveltos
 
-Once we have our Civo clusters ready, it is time to proceed with the Sveltos cluster registration. To do that, we will utilise `sveltosctl` and generate a new kubeconfig file.
+For this demonstration I have used [Civo Kubernetes](https://www.civo.com/kubernetes) clusters. Once the Kubernetes clusters are ready, it is time to proceed with the Sveltos cluster registration. To do that, we will utilise `sveltosctl` and generate a new kubeconfig file.
 
 ```bash
 $ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
@@ -65,7 +65,7 @@ $ sveltosctl register cluster --namespace=civo --cluster=mesh01 \
     --labels=cilium=zone01
 ```
 
-We will register the Civo clusters with Sveltos on the mentioned **namespace**, and **name** and will attach the cluster **labels** `cilium=zone01` and `cilium=zone02` respectively.
+We will register the clusters with Sveltos on the mentioned **namespace**, **name**, and will attach the cluster **labels** `cilium=zone01` and `cilium=zone02` respectively.
 
 :::note
 If the namespace does not exist in the management cluster, the command will fail with the namespace not found error. Ensure the defined namespace exists in the cluster before registration.
@@ -83,9 +83,9 @@ mgmt        mgmt     true    v1.28.9+rke2r1   sveltos-agent=present
 
 ## Step 2: Deploy Cilium Cluster Mesh ConfigMap
 
-Before we even start working with the Sveltos templating features, we will deploy two configmaps that include the Cilium Cluster Mesh configuration.
+Before we even start working with the Sveltos templating, we will deploy two `ConfigMap` resources that include the Cilium Cluster Mesh configuration.
 
-### Example - Mesh01 ConfigMap
+### Example - mesh01 ConfigMap
 
 ```yaml
 apiVersion: v1
@@ -95,18 +95,20 @@ metadata:
   namespace: civo
 data:
   id: "1"
-  k8sServiceHost: "74.220.24.95"
+  k8sServiceHost: "74.220.x.x"
   k8sServicePort: "6443"
   nodePort: "32379"
   crt: "Define the base64 ca.crt"
   key: "Define the base64 ca.key"
   clusterPoolIPv4PodCIDRList: "10.244.0.0/16"
   peermeshname: "mesh02"
-  peermeship: "192.168.1.9"
+  peermeship: "192.168.x.x"
   peermeshport: "32380"
 ```
 
-### Deploy ConfigMap to Management Cluster
+From the above YAML definition, it is clear that the resources we would like to deploy are in a key-value format. The `ConfigMap` for both clusters contains the required information to form a [Cilium cluster mesh](https://cilium.io/use-cases/cluster-mesh/) seamlessly.
+
+### Deploy ConfigMap Management Cluster
 
 ```bash
 $ export KUBECONFIG=<Sveltos managament cluster> 
@@ -120,11 +122,15 @@ cilium-config-mesh02   10     5s
 kube-root-ca.crt       1      23m
 ```
 
+:::note
+As the Kubernetes-managed clusters are registered in the `civo` namespace, the `ConfigMaps` are also defined there.
+:::
+
 ## Step 3: Deploy Sveltos ClusterProfile
 
-We will now create a Sveltos ClusterProfile to install Cilium as a CNI alongside Hubble UI and Cilium cluster mesh by instantiating the configuration from the information located in the ConfigMap created in previous step.
+We will create a Sveltos [ClusterProfile](https://projectsveltos.github.io/sveltos/features/set/#referencing-clustersetset-in-a-clusterprofileprofile) to install **Cilium** as a **CNI** alongside the **Hubble UI** and **Cilium cluster mesh** by instantiating the configuration from the information located in the `ConfigMap` created in previous step.
 
-### ClusterProfile mesh01
+### Example - mesh01 ClusterProfile 
 
 ```yaml
 apiVersion: config.projectsveltos.io/v1beta1
@@ -208,6 +214,18 @@ spec:
           enabled: true
 ```
 
+The `ClusterProfile` will get deployed to the managed clusters with the label set to `cilium:zone01`. Once a cluster is found, we instruct Sveltos to use the `templateResourceRefs` capability and use the details found in the `ConfgiMap` with the name set to `cilium-config-{{ .Cluster.metadata.name }}`. This will match the `cilium-config-mesh01` and `cilium-config-mesh02` `ConfigMaps`. Then, we instruct Sveltos to install the Cilium Helm chart v1.15.6.
+
+For the Cilium Helm chart instantiation, we go through the `ConfigMap` and populate the `values` based on the `key` definition.
+
+### Deploy ClusterProfile Management Cluster
+
+```bash
+$ export KUBECONFIG=<Sveltos managament cluster> 
+
+$ kubectl apply -f clusterprofile_mesh01.yaml,clusterprofile_mesh02.yaml
+```
+
 ## Step 4: Validate Results
 
 ### Validation - sveltosctl
@@ -222,10 +240,10 @@ spec:
 +-------------+---------------+-------------+--------+---------+--------------------------------+-----------------------------------+
 ```
 
-### Validation - Cluster mesh01
+### Validation - mesh01
 
 ```bash
-kubectl exec -it -n kube-system cilium-888jc -c cilium-agent -- cilium-dbg troubleshoot clustermesh mesh02
+$ kubectl exec -it -n kube-system cilium-888jc -c cilium-agent -- cilium-dbg troubleshoot clustermesh mesh02
 Found 1 remote cluster configurations
 Troubleshooting filtered subset of clusters: mesh02
 
@@ -234,9 +252,9 @@ Remote cluster "mesh02":
 
 🔌 Endpoints:
    - https://mesh02.mesh.cilium.io:32380
-     ✅ Hostname resolved to: 192.168.1.9
-     ✅ TCP connection successfully established to 192.168.1.9:32380
-     ✅ TLS connection successfully established to 192.168.1.9:32380
+     ✅ Hostname resolved to: 192.168.x.x
+     ✅ TCP connection successfully established to 192.168.x.x:32380
+     ✅ TLS connection successfully established to 192.168.x.x:32380
      ℹ️  Negotiated TLS version: TLS 1.3, ciphersuite TLS_AES_128_GCM_SHA256
      ℹ️  Etcd server version: 3.5.14
 
@@ -262,10 +280,10 @@ Remote cluster "mesh02":
 
 ```
 
-### Validation - Cluster mesh02
+### Validation - mesh02
 
 ```bash
-kubectl exec -it -n kube-system cilium-94ddz -c cilium-agent -- cilium-dbg troubleshoot clustermesh mesh01
+$ kubectl exec -it -n kube-system cilium-94ddz -c cilium-agent -- cilium-dbg troubleshoot clustermesh mesh01
 Found 1 remote cluster configurations
 Troubleshooting filtered subset of clusters: mesh01
 
@@ -274,9 +292,9 @@ Remote cluster "mesh01":
 
 🔌 Endpoints:
    - https://mesh01.mesh.cilium.io:32379
-     ✅ Hostname resolved to: 192.168.1.11
-     ✅ TCP connection successfully established to 192.168.1.11:32379
-     ✅ TLS connection successfully established to 192.168.1.11:32379
+     ✅ Hostname resolved to: 192.168.x.x
+     ✅ TCP connection successfully established to 192.168.x.x:32379
+     ✅ TLS connection successfully established to 192.168.x.x:32379
      ℹ️  Negotiated TLS version: TLS 1.3, ciphersuite TLS_AES_128_GCM_SHA256
      ℹ️  Etcd server version: 3.5.14
 
@@ -301,11 +319,19 @@ Remote cluster "mesh01":
    ℹ️  Etcd cluster ID: 21f7360bef94b707
 ```
 
+Cilium cluster mesh is deployed in one run without the need for an additional Infrastructure as Code (IaC) tool or additional rendering!
+
+![title image reading "Michael Scott Dance - Reference: Phillip Hamilton - https://knowyourmeme.com/memes/michael-scott-with-speaker-everybody-dance-now"](https://i.kym-cdn.com/entries/icons/original/000/045/269/ebdn.jpg)
+
+## Sveltos Templating Benefits
+
+Sveltos templating enables users to utilise the **same add-on configuration** across different clusters while allowing variations like different add-on configuration values.
+
+Sveltos lets users define add-ons and applications in a **reusable** way. We can deploy the definitions across **multiple** clusters with **minor adjustments**. The approach saves **time**, **effort**, and **headaches**, especially in large-scale environments.
+
 ## Conclusions
 
-We demonstrated an easy way of deploying Cilium CNI to an EKS cluster with the Sveltos ClusterProfile. The complete lifecycle of the CNI is now controlled by Sveltos and without external dependencies.
-
-Take advantage of the [Sveltos Templating](https://projectsveltos.github.io/sveltos/template/intro_template/) and the [Sveltos Event Framework](https://projectsveltos.github.io/sveltos/events/addon_event_deployment/) capabilities to make every Kubernetes deployment and add-on easier!
+In a couple of minutes and with a minimal configuration effort we formed a cluster mesh between two Kubernetes clusters. This is the power of Sveltos templating.
 
 ## ✉️ Contact
 
