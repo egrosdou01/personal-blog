@@ -3,7 +3,7 @@ slug: rancher-rke2-cilium-azure
 title: Rancher RKE2 Cluster on Azure
 authors: [egrosdou01]
 date: 2024-07-26
-tags: [Rancher,cilium,rke2,open-source,kubernetes,gitops,devops,azure]
+tags: [rancher,cilium,rke2,open-source,kubernetes,gitops,devops,azure]
 image: ./Rancher_RKE2_Cilium_Azure.jpg
 ---
 
@@ -106,7 +106,7 @@ Azure App Registration is the process of registering an application with Azure A
 
 ## Azure Free Account Limitations
 
-Find below some of the limitations spotted with the `free-credti` subscription.
+Find below some of the limitations spotted with the `free-credit` subscription.
 
 1. You cannot have more than **one** resource pools
 1. You cannot have more than **3** Public IP addresses
