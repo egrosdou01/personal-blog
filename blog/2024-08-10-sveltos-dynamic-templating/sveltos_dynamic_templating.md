@@ -1,6 +1,6 @@
 ---
-slug: sveltos-dynamic-templating
-title: Sveltos Dynamic Templating
+slug: sveltos-templating-cilium-cluster-mesh
+title: "Sveltos Templating: Cilium Cluster Mesh in One Go"
 authors: [egrosdou01]
 date: 2024-08-10
 image: ./Sveltos_Templating_Cilium.jpg
@@ -11,12 +11,11 @@ tags: [sveltos,cilium,open-source,kubernetes,gitops,devops]
 
 Have you ever wondered how to dynamically instantiate Kubernetes resources before deploying them to a cluster? What if I tell you there is an easy way to do it? [Sveltos](https://github.com/projectsveltos) lets you define add-ons and applications using [templates](https://projectsveltos.github.io/sveltos/template/intro_template/). Before deploying any resource down the **managed** clusters, Sveltos instantiates the templates using information gathered from the **management** cluster.
 
-In today's blog post, we will demonstrate how to form a Cilium cluster mesh between two clusters using the Sveltos templating to instantiate the Cilium helm chart.
+In a [previous post](../2024-07-18-rke2-cilium/cilium-cluster-mesh-rke2.md), we outlined a step-by-step approach to forming a [Cilium cluster mesh](https://docs.cilium.io/en/v1.15/network/clustermesh/clustermesh/) between two clusters. In today's post, we will demonstrate how the Sveltos templating is used to deploy a Cilium cluster mesh dynamically in **one go**.
 
 ![title image reading "Sveltos Templating Cilium"](Sveltos_Templating_Cilium.jpg)
 
 <!--truncate-->
-
 
 ## Lab Setup
 
@@ -221,6 +220,10 @@ spec:
 The `ClusterProfile` will get deployed to the managed clusters with the label set to `cilium:zone01`. Once a cluster is found, we instruct Sveltos to use the `templateResourceRefs` capability and use the details found in the `ConfgiMap` with the name set to `cilium-config-{{ .Cluster.metadata.name }}`. This will match the `cilium-config-mesh01` and `cilium-config-mesh02` ConfigMaps. Then, we instruct Sveltos to install the Cilium Helm chart v1.15.6.
 
 For the Cilium Helm chart instantiation, we go through the `ConfigMap` and populate the `values` based on the `key` definition.
+
+:::tip
+We deploy a Cilium cluster mesh with a common TLS certificate and a `NodePort` service. For the production environment, it is recommended to deploy a `LoadBalancer` setup. The above template can be used by updating the `clustermesh.service.type=LoadBalancer` and setting the standard service `Port`.
+:::
 
 ### Deploy ClusterProfile Management Cluster
 
