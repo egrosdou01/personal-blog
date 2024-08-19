@@ -47,7 +47,7 @@ const config = {
           blogDescription: 'Eleni Blog',
           postsPerPage: 10,
           blogSidebarTitle: 'Recent posts',
-          blogSidebarCount: 5,
+          blogSidebarCount: 6,
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -75,6 +75,7 @@ const config = {
           //   label: 'Tutorial',
           // },
           {to: 'blog', label: 'Blog', position: 'left'},
+          {to: '/blog/tags', label: 'Tags', position: 'left'},
           {to: 'talks', label: 'Talks', position: 'left'},
           {
             href: 'https://github.com/egrosdou01',
