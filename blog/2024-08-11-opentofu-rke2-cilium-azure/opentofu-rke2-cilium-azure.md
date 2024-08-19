@@ -14,7 +14,7 @@ In a [previous post](../2024-07-26-rancher-rke2-azure/rancher-rke2-cilium-azure.
 
 Additionally, we will demonstrate how easy it is to customise the [Cilium](https://docs.cilium.io/en/stable/) configuration and enable [kube-vip](https://kube-vip.io/) for LoadBalancer services from the HCL (HashiCorp Configuration Language) definition.
 
-![title image reading "OpenTofu Rancher RKE2 Cluster on Azure"](OpenTofu_Rancher_Cilium_Azure.jpg)
+![title image reading "OpenTofu Rancher RKE2 Cluster on Azure"](openTofu_rancher_cilium_azure.jpg)
 <!--truncate-->
 
 ## Lab Setup
@@ -174,7 +174,7 @@ data "rancher2_project" "system" {
 
 ## output.tf
 
-In the file we can speficy anything we want based on the use case at hand. For this demonmstration, we keep it simple. We would display only the RKE2 `cluster-name` and `cluster-id`.
+In the file we can speficy anything we want based on the use case at hand. For this demonstration, we keep it simple. We would display only the RKE2 `cluster-name` and `cluster-id`.
 
 ```hcl
 # Display the RKE2 Cluster Name
@@ -433,7 +433,7 @@ When performing the `tofu init` command, I received the below warning.
 - Installed rancher/rancher2 v4.1.0. Signature validation was skipped due to the registry not containing GPG keys for this provider
 ```
 
-I raised a new `GitHub` [issue](https://github.com/rancher/terraform-provider-rancher2/issues/1385) with the Terraform Rancher2 Provider.
+I raised a `GitHub` [issue](https://github.com/rancher/terraform-provider-rancher2/issues/1385) with the Terraform Rancher2 Provider.
 :::
 
 The above will first create the Azure Cloud Credentials in the Rancher instance, then continue with the RKE2 cluster creation. The `tofu apply` command might take up to 10 min. Just wait for it to complete.
