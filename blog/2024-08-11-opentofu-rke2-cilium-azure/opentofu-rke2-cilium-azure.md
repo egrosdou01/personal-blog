@@ -8,7 +8,7 @@ tags: [opentofu,cilium,rke2,open-source,kubernetes,gitops,devops]
 
 ## Introduction
 
-In a [previous post](../2024-07-26-rancher-rke2-azure/rancher-rke2-cilium-azure.md), we covered how to create an [RKE2](https://docs.rke2.io/) cluster on [Azure Cloud](https://azure.microsoft.com/en-us/get-started) using the [cloud-free credits](https://azure.microsoft.com/en-us/free#all-free-services) from the **Rancher UI**. As this is a convenient approach to get started with Rancher, in today's post we will demonstrate how to use [OpenTofu](https://opentofu.org/) to automate the deployment.
+In a [previous post](../2024-07-26-rancher-rke2-azure/rancher-rke2-cilium-azure.md), we covered how to create an [RKE2](https://docs.rke2.io/) cluster on [Azure Cloud](https://azure.microsoft.com/en-us/get-started) using the [cloud-free credits](https://azure.microsoft.com/en-us/free#all-free-services) from the **Rancher UI**. As this is a convenient approach to get started with Rancher, in today's post, we will demonstrate how to use [OpenTofu](https://opentofu.org/) to automate the deployment.
 
 `OpenTofu` is a fork of [Terraform](https://www.terraform.io/). It is an open-source project, community-driven, and managed by the Linux Foundation. If you want to get familiar with what `OpenTofu` is and how to get started, check out the link [here](https://opentofu.org/docs/intro/core-workflow/).
 
@@ -40,7 +40,7 @@ Additionally, we will demonstrate how easy it is to customise the [Cilium](https
 
 ### Rancher Server
 
-We do not concentrate on installing `Rancher`. If you are not sure how to install Rancher, have a look at the official documentation [here](https://ranchermanager.docs.rancher.com/getting-started/quick-start-guides) or go through the guide I created a couple of weeks back found [here](https://medium.com/@eleni.grosdouli/rancher-on-eks-with-nginx-ingress-and-lets-encrypt-4f041fc1adae). 
+We do not concentrate on installing `Rancher`. If you are unsure how to install Rancher, take a look at the official documentation [here](https://ranchermanager.docs.rancher.com/getting-started/quick-start-guides) or go through the guide I created a couple of weeks back found [here](https://medium.com/@eleni.grosdouli/rancher-on-eks-with-nginx-ingress-and-lets-encrypt-4f041fc1adae). 
 
 ### Azure Free Credits
 
@@ -53,7 +53,7 @@ Ensure the below are satisfied.
 
 ### Install OpenTofu
 
-There is a wide variety of options provided to install `OpenTofu`. To follow along, checkout the [link](https://opentofu.org/docs/intro/install/) and install `OpenTofu`.
+There is a wide variety of options provided to install `OpenTofu`. To follow along, check out the [link](https://opentofu.org/docs/intro/install/) and install `OpenTofu`.
 
 #### Validation
 
@@ -65,18 +65,18 @@ on darwin_arm64
 
 ## Step 0: Pre-work
 
-### Step 0.1: Familirize with OpenTofu Registry
+### Step 0.1: Familiarise with OpenTofu Registry
 
 As with the Terraform registry, the `OpenTofu` registry is a centralised service for **distributing** and **managing** providers/modules. Users can **share**, **discover**, and **consume** reusable infrastructure modules and providers.
 
 A list of the available providers/modules is located [here](https://github.com/opentofu/registry/).
 
-For our demonstration, we identified the `rancher2` provider is supported by OpenTofu. The details can be found [here](https://github.com/opentofu/registry/tree/main/providers/r/rancher).
+The `rancher2` provider is supported by OpenTofu. The details can be found [here](https://github.com/opentofu/registry/tree/main/providers/r/rancher).
 
 
-### Step 0.2: Familiarize with Rancher2 Provider
+### Step 0.2: Familiarise with Rancher2 Provider
 
-Before we even begin with the actual coding, it is a nice opportunity to familiarise with the [Rancher2 provider](https://registry.terraform.io/providers/rancher/rancher2/4.1.0/docs). For RKE2 clusters, we only care about the `Resources` and `Data Resources` with the extention of `v2` at the end.
+Before we even begin with the actual coding, it is a nice opportunity to familiarise with the [Rancher2 provider](https://registry.terraform.io/providers/rancher/rancher2/4.1.0/docs). For RKE2 clusters, we only care about the `Resources` and `Data Resources` with the extension of `v2` at the end.
 
     ![title image reading "Rancher2 Terraform Provider"](rancher2_tf_provider.png)
 
@@ -86,11 +86,11 @@ Check out the example sections of the resources available and the supported Clou
 
 ### Step 0.3: Choose Integrated Development Environment (IDE)
 
-As with any other project, we will use [Git](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F) to store our code in a central location and [Visual Studio Code](https://code.visualstudio.com/) to perform the coding. Choose your favourite source control system and IDE, and let's dive into the next sections! 🚀
+As with any other project, we will use [Git](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F) to store our code in a central location and [Visual Studio Code](https://code.visualstudio.com/) to perform the coding. Choose your favourite source control system and IDE, and dive into the next sections! 🚀
 
 ## Outline Project Structure
 
-Like with any Terraform project, we will create a number of `.tf` files to store the Infrastructure as Code (IaC) definitions. For best practices, have a look at the [link](https://spacelift.io/blog/opentofu-tutorial#opentofu-best-practices).
+Like with any Terraform project, we will create several `.tf` files to store the Infrastructure as Code (IaC) definitions. For best practices, have a look at the [link](https://spacelift.io/blog/opentofu-tutorial#opentofu-best-practices).
 
 In your favourite IDE, create a new project and create the below file structure.
 
@@ -99,13 +99,13 @@ In your favourite IDE, create a new project and create the below file structure.
 - `main.tf`: Contains the resource blocks that define the resources to be created in the Azure cloud
 - `variables.tf`: Contains the variable declaration used in the resource blocks
 - `providers.tf`: Contains the required providers used in the resource blocks
-- `data.tf`: Contains a number of data retrived from the outside and use it through the resource creation
+- `data.tf`: Contains several data retrieved from the outside and used it through the resource creation
 - `output.tf`: Contains the output that needs to be generated on successful completion of the OpenTofu plan/apply
 - `*.tfvars`: Contains the default values of the specified variables
 
 ## providers.tf
 
-As mentioned above, the `providers.tf` file holds the required providers that will be used for the creation of the relevant resources. OpenTofu configurations must declare which providers they require so that OpenTofu can install and use them.
+The `providers.tf` file holds the required providers that will be used for the creation of the relevant resources. OpenTofu configurations must declare which providers they require so that OpenTofu can install and use them.
 
 ```hcl
 terraform {
@@ -131,19 +131,19 @@ provider "rancher2" {
 ```
 
 :::tip
-It is a good practice to avoid specifying sensitive data in the `variables.tf` file. The `providers.tf` file expects the `rancher2_api_url` and `rancher2_token_key` variables. Following the best practices, we can have a file that exports the required variable name and value. From a terminal window we set the [source](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-linux) pointing to the file before performing any IaC actions.
+It is a good practice to avoid specifying sensitive data in the `variables.tf` file. The `providers.tf` file expects the `rancher2_api_url` and `rancher2_token_key` variables. Following the best practices, we can have a file that exports the required variable name and value. From a terminal window, we set the [source](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-linux) pointing to the file before performing any IaC actions.
 :::
 
 :::note
-The `required_providers` block is used to specify and configure the providers necessary for a particular module or configuration. Before we define the `rancher2` provider block, we need to ensure it is included in the `required_providers` section. It is a good practice to befine the provider versions instead of letting `OpenTofu` CLI to download the latest available. More information can be found [here](https://opentofu.org/docs/language/providers/configuration/).
+The `required_providers` block is used to specify and configure the providers necessary for a particular module or configuration. Before we define the `rancher2` provider block, we need to ensure it is included in the `required_providers` section. It is a good practice to define the provider versions instead of letting the `OpenTofu` CLI download the latest available. More information can be found [here](https://opentofu.org/docs/language/providers/configuration/).
 :::
 
 ## data.tf
 
-The `data.tf` file holds the code to downlod relevant information about the kube-vip installation. The information will be used later on in the `main.tf` file while defining the RKE2 cluster configuration.
+The `data.tf` file holds the code to download relevant information about the kube-vip installation. The information will be used later on in the `main.tf` file while defining the RKE2 cluster configuration.
 
 ```hcl
-# Download the kube-vip required RBAC manisfest
+# Download the kube-vip required RBAC manifest
 data "http" "kube_vip_rbac" {
   url = "https://kube-vip.io/manifests/rbac.yaml"
 }
@@ -154,27 +154,18 @@ data "http" "kube_vip_version" {
   url    = "https://api.github.com/repos/kube-vip/kube-vip/releases#v0.8.2"
 }
 
-# Download the kube-vip-cloud-provider required manisfest
+# Download the kube-vip-cloud-provider required manifest
 data "http" "kube_vip_cloud_provider" {
   url = "https://raw.githubusercontent.com/kube-vip/kube-vip-cloud-provider/main/manifest/kube-vip-cloud-controller.yaml"
 }
 
-# Get the system-id from the Rancher server
-data "rancher2_namespace" "kube_system" {
-  name       = "kube-system"
-  project_id = data.rancher2_project.system.id
-}
+...
 
-# Get the cluster-id from from the Rancher server
-data "rancher2_project" "system" {
-  name       = "System"
-  cluster_id = rancher2_cluster_v2.rke2.cluster_v1_id
-}
 ```
 
 ## output.tf
 
-In the file we can speficy anything we want based on the use case at hand. For this demonstration, we keep it simple. We would display only the RKE2 `cluster-name` and `cluster-id`.
+In the file, we can specify anything we want based on the use case at hand. For this demonstration, we keep it simple. We would display only the RKE2 `cluster-name` and `cluster-id`.
 
 ```hcl
 # Display the RKE2 Cluster Name
@@ -186,6 +177,9 @@ output "rke2_cluster_name" {
 output "rancher_cluster_id" {
   value = data.rancher2_project.system.cluster_id
 }
+
+...
+
 ```
 
 ## main.tf
@@ -203,7 +197,7 @@ resource "random_id" "cluster_random_name" {
 
 ### Define the Azure Cloud Credentials
 
-It is a requirement to have valid Azure cloud credentials before we proceed with the RKE2 installation. If you are unsure how to get the below variable details from your subscription, have a look at my previous post [here](../2024-07-26-rancher-rke2-azure/rancher-rke2-cilium-azure.md#set-up-rancher-cloud-credentials).
+It is a requirement to have valid Azure cloud credentials before proceeding with the RKE2 installation. If you are unsure how to get the below variable details, have a look at my previous post [here](../2024-07-26-rancher-rke2-azure/rancher-rke2-cilium-azure.md#set-up-rancher-cloud-credentials).
 
 ```hcl
 # Create the Azure Cloud Credentials in Rancher
@@ -217,9 +211,9 @@ resource "rancher2_cloud_credential" "azure_creds" {
 }
 ```
 
-### Define the Machine Condifugration
+### Define the Machine Configuration
 
-The below resource will create the required virtual machines for the RKE2 cluster. Here, we define two types of nodes, the controller and the worker node. They could have the same or different hardware specifications based on the use case scenario that needs to get covered.
+The below resource will create the required virtual machines for the RKE2 cluster. Here, we define two types of nodes, the controller and the worker node. They could have the same or different hardware specifications based on the use case scenario that needs to be covered.
 
 ```hcl
 # Create the different nodes for RKE2 (controller and worker node)
@@ -319,6 +313,9 @@ resource "rancher2_cluster_v2" "rke2" {
     }
 
   }
+
+...
+
 ```
 
 ## variables.tf
@@ -382,6 +379,8 @@ variable "rancher2_token_key" {
   type        = string
 }
 
+...
+
 ```
 ### terraform.tfvars
 
@@ -410,6 +409,10 @@ rancher_env = {
 rke_cluster_cidr   = "10.42.0.0/16"
 rke_service_cidr   = "10.43.0.0/16"
 ```
+
+:::tip
+The node definition will allow you to create an RKE2 cluster based on the free-credits subscription. If the above are changed, the deployment might fail due to subscription limitations.
+:::
 
 ## Execution
 
