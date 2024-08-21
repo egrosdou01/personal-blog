@@ -14,7 +14,7 @@ In a [previous post](../2024-07-26-rancher-rke2-azure/rancher-rke2-cilium-azure.
 
 Additionally, we will demonstrate how easy it is to customise the [Cilium](https://docs.cilium.io/en/stable/) configuration and enable [kube-vip](https://kube-vip.io/) for LoadBalancer services from the HCL (HashiCorp Configuration Language) definition.
 
-![title image reading "OpenTofu Rancher RKE2 Cluster on Azure"](openTofu_rancher_cilium_azure.jpg)
+![title image reading "OpenTofu Rancher RKE2 Cluster on Azure"](openTofu_rancher_intro_image.jpg)
 <!--truncate-->
 
 ## Lab Setup
