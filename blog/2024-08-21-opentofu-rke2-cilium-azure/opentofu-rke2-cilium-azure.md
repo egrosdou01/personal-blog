@@ -2,7 +2,7 @@
 slug: opentofu-rke2-cilium-azure.md
 title: "OpenTofu: RKE2 Cluster with Cilium on Azure"
 authors: [egrosdou01]
-date: 2024-08-11
+date: 2024-08-21
 tags: [opentofu,cilium,rke2,open-source,kubernetes,gitops,devops]
 ---
 
@@ -186,15 +186,6 @@ output "rancher_cluster_id" {
 
 The file contains the logic for creating virtual machines and installing RKE2 on top. We will break the `main.tf` file into smaller pieces and try to go through them in more detail.
 
-### Random ID for each cluster and nodes
-
-```hcl
-# Random ID to be appended to the cluster and nodes
-resource "random_id" "cluster_random_name" {
-  byte_length = 3
-}
-```
-
 ### Define the Azure Cloud Credentials
 
 It is a requirement to have valid Azure cloud credentials before proceeding with the RKE2 installation. If you are unsure how to get the below variable details, have a look at my previous post [here](../2024-07-26-rancher-rke2-azure/rancher-rke2-cilium-azure.md#set-up-rancher-cloud-credentials).
@@ -260,25 +251,11 @@ resource "rancher2_cluster_v2" "rke2" {
 
     # Define the Helm chart values for the Cilium installation
     chart_values = <<-EOF
+      # Have a look at https://github.com/cilium/cilium/blob/main/install/kubernetes/cilium/values.yaml to include additional custom values
       rke2-cilium:
         k8sServiceHost: 127.0.0.1
         k8sServicePort: 6443
         kubeProxyReplacement: true # Enable Cilium with Kube-Proxy replacement on
-        operator:
-          replicas: 1
-        hubble: # Enable the Cilium Hubble UI (https://docs.cilium.io/en/v1.15/gettingstarted/hubble/)
-          enabled: true
-          peerService:
-            clusterDomain: cluster.local
-          relay:
-            enabled: true
-          tls:
-            auto:
-              certValidityDuration: 1095
-              enabled: true
-              method: helm
-          ui:
-            enabled: true
       EOF
 
     # Define the Rancher global settings for the whole cluster
@@ -470,8 +447,6 @@ helm-install-rke2-metrics-server-5t4sj                              0/1     Comp
 helm-install-rke2-snapshot-controller-crd-jvdtd                     0/1     Completed   0          11m
 helm-install-rke2-snapshot-controller-zpkhv                         0/1     Completed   0          11m
 helm-install-rke2-snapshot-validation-webhook-6qlpx                 0/1     Completed   0          11m
-hubble-relay-6f89c7f794-r2scw                                       1/1     Running     0          11m
-hubble-ui-6969854c48-phv2w                                          2/2     Running     0          11m
 kube-apiserver-eleni-azure-01-controller-49abc099-ftvnv             1/1     Running     0          11m
 kube-controller-manager-eleni-azure-01-controller-49abc099-ftvnv    1/1     Running     0          11m
 kube-scheduler-eleni-azure-01-controller-49abc099-ftvnv             1/1     Running     0          11m
