@@ -219,7 +219,7 @@ The below resource will create the required virtual machines for the RKE2 cluste
 # Create the different nodes for RKE2 (controller and worker node)
 resource "rancher2_machine_config_v2" "nodes" {
   for_each      = var.node
-  generate_name = replace(each.value.name, "_", "-")
+  generate_name = each.value.name
 
   azure_config {
     disk_size            = each.value.agent_disk
@@ -287,7 +287,6 @@ resource "rancher2_cluster_v2" "rke2" {
       cluster-cidr: ${var.rke_cluster_cidr}
       service-cidr: ${var.rke_service_cidr}
       disable-kube-proxy: true
-      etcd-expose-metrics: false
       EOF
 
     # Sepcify the role of each node based on the name of the node
@@ -303,7 +302,7 @@ resource "rancher2_cluster_v2" "rke2" {
 
         machine_config {
           kind = rancher2_machine_config_v2.nodes[machine_pools.key].kind
-          name = replace(rancher2_machine_config_v2.nodes[machine_pools.key].name, "_", "-")
+          name = rancher2_machine_config_v2.nodes[machine_pools.key].name
         }
       }
     }
