@@ -409,6 +409,10 @@ rke_cluster_cidr   = "10.42.0.0/16"
 rke_service_cidr   = "10.43.0.0/16"
 ```
 
+:::note
+The kube-vip interface name defined in the file represents the network interface from the virtual machines created in the Azure Cloud environment.
+:::
+
 :::tip
 The node definition will allow you to create an RKE2 cluster based on the free-credits subscription. If the above are changed, the deployment might fail due to subscription limitations.
 :::
