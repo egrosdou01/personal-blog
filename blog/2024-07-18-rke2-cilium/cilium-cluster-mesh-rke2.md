@@ -3,7 +3,7 @@ slug: cilium-cluster-mesh-rke2
 title: Cilium Cluster Mesh on RKE2
 authors: [egrosdou01]
 date: 2024-07-18
-tags: [cilium,rke2,open-source,kubernetes,gitops,devops]
+tags: [cilium,rke2,open-source,kubernetes,gitops,devops,"2024"]
 ---
 
 ## Introduction
