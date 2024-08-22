@@ -4,7 +4,7 @@ title: Cilium on EKS with Sveltos
 authors: [egrosdou01]
 date: 2024-07-15
 image: ./cilium_sveltos_eks.jpg
-tags: [cilium,open-source,kubernetes,gitops,devops]
+tags: [cilium,open-source,kubernetes,gitops,devops,"2024"]
 ---
 
 ## Introduction
