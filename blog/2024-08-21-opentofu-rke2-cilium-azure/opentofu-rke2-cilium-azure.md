@@ -76,12 +76,16 @@ The `rancher2` provider is supported by OpenTofu. The details can be found [here
 
 ### Step 0.2: Familiarise with Rancher2 Provider
 
-Before we even begin with the actual coding, it is a nice opportunity to familiarise with the [Rancher2 provider](https://registry.terraform.io/providers/rancher/rancher2/4.1.0/docs). For RKE2 clusters, we only care about the `Resources` and `Data Resources` with the extension of `v2` at the end.
+Before we even begin with the actual coding, it is a nice opportunity to familiarise with the [Rancher2 provider](https://search.opentofu.org/provider/opentofu/rancher2/v4.1.0).
 
     ![title image reading "Rancher2 Terraform Provider"](rancher2_tf_provider.png)
 
 :::tip
 Check out the example sections of the resources available and the supported Cloud providers.
+:::
+
+:::warning
+Be mindful this is an alpha preview of the OpenTofu Registry UI. If you encounter any issues, report them [here](https://github.com/opentofu/registry-ui/issues).
 :::
 
 ### Step 0.3: Choose Integrated Development Environment (IDE)
@@ -109,19 +113,20 @@ The `providers.tf` file holds the required providers that will be used for the c
 
 ```hcl
 terraform {
-# Terraform usage: required_version = "~> 1.5.4"
-  # OpenTofu usage
   required_version = "~> 1.8.1"
 
   required_providers {
     rancher2 = {
-      source  = "rancher/rancher2"
+      source  = "opentofu/rancher2"
       version = "4.1.0"
     }
-
     local = {
-      source  = "hashicorp/local"
+      source  = "opentofu/local"
       version = "2.5.1"
+    }
+    http = {
+      source  = "opentofu/http"
+      version = "3.4.4"
     }
   }
 }
@@ -135,14 +140,6 @@ provider "rancher2" {
 
 :::tip
 It is a good practice to avoid specifying sensitive data in the `variables.tf` file. The `providers.tf` file expects the `rancher2_api_url` and `rancher2_token_key` variables. Following the best practices, we can have a file that exports the required variable name and value. From a terminal window, we set the [source](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-linux) pointing to the file before performing any IaC actions.
-:::
-
-:::note
-The `required_providers` block is used to specify and configure the providers necessary for a particular module or configuration. Before we define the `rancher2` provider block, we need to ensure it is included in the `required_providers` section. It is a good practice to define the provider versions instead of letting the `OpenTofu` CLI download the latest available. More information can be found [here](https://opentofu.org/docs/language/providers/configuration/).
-:::
-
-:::note
-If you like to run the same `plan` and `apply` with Terraform, just comment out the line `required_version = "~> 1.5.4"` (be mindful about your Terraform binary used) and comment in the OpenTofu one `required_version = "~> 1.8.1"`.
 :::
 
 ## data.tf
@@ -419,8 +416,8 @@ $ tofu apply
 When performing the `tofu init` command, I received the below warning.
 
 ```bash
-- Installing rancher/rancher2 v4.1.0...
-- Installed rancher/rancher2 v4.1.0. Signature validation was skipped due to the registry not containing GPG keys for this provider
+- Installing opentofu/rancher2 v4.1.0...
+- Installed opentofu/rancher2 v4.1.0. Signature validation was skipped due to the registry not containing GPG keys for this provider
 ```
 
 I raised a `GitHub` [issue](https://github.com/rancher/terraform-provider-rancher2/issues/1385) with the Terraform Rancher2 Provider.
