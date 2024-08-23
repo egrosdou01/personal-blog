@@ -3,7 +3,7 @@ slug: opentofu-rke2-cilium-azure.md
 title: "OpenTofu: RKE2 Cluster with Cilium on Azure"
 authors: [egrosdou01]
 date: 2024-08-21
-tags: [opentofu,cilium,rke2,open-source,kubernetes,gitops,devops,"2024"]
+tags: [opentofu,cilium,rke2,azure,open-source,kubernetes,gitops,devops,"2024"]
 ---
 
 ## Introduction
@@ -109,6 +109,9 @@ The `providers.tf` file holds the required providers that will be used for the c
 
 ```hcl
 terraform {
+# Terraform usage: required_version = "~> 1.5.4"
+  # OpenTofu usage
+  required_version = "~> 1.8.1"
 
   required_providers {
     rancher2 = {
@@ -136,6 +139,10 @@ It is a good practice to avoid specifying sensitive data in the `variables.tf` f
 
 :::note
 The `required_providers` block is used to specify and configure the providers necessary for a particular module or configuration. Before we define the `rancher2` provider block, we need to ensure it is included in the `required_providers` section. It is a good practice to define the provider versions instead of letting the `OpenTofu` CLI download the latest available. More information can be found [here](https://opentofu.org/docs/language/providers/configuration/).
+:::
+
+:::note
+If you like to run the same `plan` and `apply` with Terraform, just comment out the line `required_version = "~> 1.5.4"` (be mindful about your Terraform binary used) and comment in the OpenTofu one `required_version = "~> 1.8.1"`.
 :::
 
 ## data.tf
@@ -417,6 +424,10 @@ When performing the `tofu init` command, I received the below warning.
 ```
 
 I raised a `GitHub` [issue](https://github.com/rancher/terraform-provider-rancher2/issues/1385) with the Terraform Rancher2 Provider.
+:::
+
+:::tip
+Check out the `.terraform/providers/registry.opentofu.org` directory with the providers sourced from the OpenTofu registry.
 :::
 
 The above will first create the Azure Cloud Credentials in the Rancher instance, then continue with the RKE2 cluster creation. The `tofu apply` command might take up to 10 min. Just wait for it to complete.
