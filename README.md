@@ -1,3 +1,6 @@
+[![CI](https://github.com/egrosdou01/personal-blog/actions/workflows/deploy.yml/badge.svg)](https://github.com/egrosdou01/personal-blog/actions)
+[![License](https://img.shields.io/badge/license-Apache-blue.svg)](LICENSE)
+
 # Website
 
 This website is a built [Docusaurus](https://docusaurus.io/), a modern static website generator.
