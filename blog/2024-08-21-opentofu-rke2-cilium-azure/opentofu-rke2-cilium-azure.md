@@ -92,6 +92,10 @@ Be mindful this is an alpha preview of the OpenTofu Registry UI. If you encounte
 
 As with any other project, we will use [Git](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F) to store our code in a central location and [Visual Studio Code](https://code.visualstudio.com/) to perform the coding. Choose your favourite source control system and IDE, and dive into the next sections! 🚀
 
+## GitHub Repo
+
+The showcase repository is available [here](https://github.com/egrosdou01/opentofu-rke2-cilium-azure/tree/main).
+
 ## Outline Project Structure
 
 Like with any Terraform project, we will create several `.tf` files to store the Infrastructure as Code (IaC) definitions. For best practices, have a look at the [link](https://spacelift.io/blog/opentofu-tutorial#opentofu-best-practices).
@@ -134,7 +138,6 @@ terraform {
 provider "rancher2" {
   api_url   = var.rancher2_api_url
   token_key = var.rancher2_token_key
-  insecure  = true
 }
 ```
 
@@ -243,7 +246,7 @@ resource "rancher2_cluster_v2" "rke2" {
 
   rke_config {
     # You can create a Terraform template and polulate the values of the file based on the variables defined below
-    additional_manifest = templatefile("${path.module}/files/kube-vip-daemonset-original.tfmpl",
+    additional_manifest = templatefile("${path.module}/files/kube-vip-daemonset.tfmpl",
       {
         int_name                = var.kube_vip.int_name
         kube_vip_rbac           = data.http.kube_vip_rbac.response_body
