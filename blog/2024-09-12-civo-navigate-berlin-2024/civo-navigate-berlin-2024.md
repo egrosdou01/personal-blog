@@ -12,7 +12,7 @@ Today's post will not be as technical as previous ones however, I wanted to shar
 
 Apart from that, I had the chance to attend many different sessions covering relevant topics (Cloud native, Security, Thought Leadership, AI) and meet fellow enthusiasts.
 
-In the below sections, I will outline some of my highlights and then a small note on the Sveltos alongside the presentation resources.
+In the section below, I will outline some of my highlights and afterwards provide a small introduction to the Sveltos presentation alongside the useful resources.
 
 ![title image reading "Civo Navigate Berlin 2024"](civo_navigate_berlin_2024.png)
 <!--truncate-->
@@ -45,7 +45,7 @@ Once the session recordings are available, a link will be included.
 
 ## Civo Navigate - Sveltos
 
-For the conference, we decided to demonstrate how Sveltos can be used to deploy and take over the control of the Container Network Interface (CNI) lifecycle with one manifest file while enabling Cilium Hubble to Network observability. In the second part of the presentation, we demonstrated to users how to create another set of manifest files to integrate Grafana, Prometheus and Loki for container logs output.
+For the conference, we decided to demonstrate how Sveltos can be used to deploy and take over the control of the Container Network Interface (CNI) lifecycle with one manifest file while enabling Cilium Hubble for Network observability. In the second part of the presentation, we demonstrated how to create another set of manifest files to integrate Grafana, Prometheus and Loki for container logs output.
 
 ### Diagram
 
@@ -57,6 +57,6 @@ The Git repository with the manifest files and the execution instructions are lo
 
 ## Conclusions
 
-All in all, it was an awesome experience to have the chance to attend and speak with fellow engineers and enthusiasts. If you plan to attend upcoming Civo Navigate conferences, check out the [link](https://www.civo.com/navigate). I am pretty confident you will have an enjoyable experience.
+All in all, it was an awesome experience to have the chance to attend and speak at the conference. If you plan to attend any upcoming Civo Navigate conferences, check out the [link](https://www.civo.com/navigate). I am pretty confident you will have an enjoyable experience!
 
 It's a wrap for this post! 🎉 Thanks for reading! Stay tuned for more exciting updates!
