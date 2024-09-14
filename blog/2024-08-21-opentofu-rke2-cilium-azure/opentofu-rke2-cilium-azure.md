@@ -1,5 +1,5 @@
 ---
-slug: opentofu-rke2-cilium-azure.md
+slug: opentofu-rke2-cilium-azure
 title: "OpenTofu: RKE2 Cluster with Cilium on Azure"
 authors: [egrosdou01]
 date: 2024-08-21

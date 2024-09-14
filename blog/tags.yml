@@ -50,3 +50,7 @@ opentofu:
   label: OpenTofu
   permalink: /opentofu
   description: OpenTofu is a fork of Terraform
+conference:
+  label: conference
+  permalink: /conference
+  description: General Conference Tag
