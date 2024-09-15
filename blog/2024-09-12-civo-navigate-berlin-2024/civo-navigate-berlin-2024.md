@@ -3,7 +3,7 @@ slug: civo-navigate-berlin-2024
 title: "Civo Navigate Berlin 2024"
 authors: [egrosdou01]
 date: 2024-09-12
-tags: [conference,open-source,kubernetes,gitops,devops,"2024"]
+tags: [Conference,open-source,kubernetes,gitops,devops,"2024"]
 ---
 
 ## Introduction

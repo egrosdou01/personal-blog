@@ -24,7 +24,7 @@ const AboutMeList = [
     title: '💻 Expertise',
     description: (
       <>
-      My expertise lies around GitOps and DevOps practices.
+      My expertise lies around GitOps practices.
       I create content about <a href="https://github.com/cilium/cilium">Cilium</a>, <a href="https://github.com/projectsveltos">ProjectSveltos</a>, <a href="https://github.com/gianlucam76/k8s-cleaner">K8s Cleaner</a>, <a href="https://github.com/rancher/rancher">Rancher</a>, <a href="https://docs.rke2.io/">RKE2 deployments</a>, and <a href="https://www.redhat.com/en/technologies/cloud-computing/openshift">Openshift</a> deployments in on-prem and cloud environments.
       </>
     ),
