@@ -8,9 +8,9 @@ tags: [conference,open-source,kubernetes,gitops,devops,"2024"]
 
 ## Introduction
 
-[Sveltos](https://github.com/projectsveltos) is on tour! Another non-technical post describing my experience at the [OSSummit Europe 2024](https://events.linuxfoundation.org/open-source-summit-europe/). Apart from outlining my experience, the post will include useful resources on open-source projects I learned during this event.
+[Sveltos](https://github.com/projectsveltos) is on tour! Another non-technical post describing my experience at the [OSSummit Europe 2024](https://events.linuxfoundation.org/open-source-summit-europe/). Apart from outlining my experience, the post will include useful resources on open-source projects I learned during the event.
 
-About Sveltos, [Gianluca Mardente](https://www.linkedin.com/in/gianlucamardente/) and I had the chance to talk at the conference and present Sveltos, how it is used to deploy and manage different Kubernetes applications and add-ons in a Multi-Cloud setup.
+About Sveltos, [Gianluca Mardente](https://www.linkedin.com/in/gianlucamardente/) and I had the chance to talk at the conference and present Sveltos and how it is used to deploy and manage different Kubernetes applications and add-ons in a Multi-Cloud setup.
 
 In the sections below, I will outline my highlights of the conference and what I have learned, while later on, I will describe what we presented about Sveltos and where to locate the required resources.
 
@@ -24,7 +24,7 @@ As with any other conference, the day began with the registration, badge pick-up
 
 ![title image reading "Coffee Dance"](https://1075koolfm.com/cobPub/uploads/2024/07/giphy.gif)
 
-For a quick look at the keynotes of Day 1, find below my highlights alongside the resources for further reading.
+For a quick look at the Day 1 keynotes, find below my highlights alongside the resources for further reading.
 
 - [Linux Foundation, CNCF, Unified Patents - partnership expansion](https://www.linuxfoundation.org/press/linux-foundation-and-cncf-expand-partnership-with-unified-patents-to-defend-open-source-software-from-non-practicing-entities)
 - [Linux Foundation, Valkey 8.0](https://www.prnewswire.com/news-releases/announcing-valkey-8-0--302248447.html)
@@ -32,7 +32,7 @@ For a quick look at the keynotes of Day 1, find below my highlights alongside th
 - [Open Source Innovation in Artificial Intelligence and Data](https://lfaidata.foundation/)
 - [The Linux Foundation Europe](https://linuxfoundation.eu/)
 
-Looking at the technical topics, there was an announcement about the formation of the [Opensearch Software Foundation](https://www.linuxfoundation.org/press/linux-foundation-announces-opensearch-software-foundation-to-foster-open-collaboration-in-search-and-analytics). Basically, AWS decided to move OpenSearch to the Linux Foundation. OpenSearch is a community-driven, Apache 2.0-licensed open source search and analytics suite that makes it easy to ingest, search, visualise, and analyse data.
+From a technical side, there was an announcement about the formation of the [OpenSearch Software Foundation](https://www.linuxfoundation.org/press/linux-foundation-announces-opensearch-software-foundation-to-foster-open-collaboration-in-search-and-analytics). AWS decided to move OpenSearch to the Linux Foundation. OpenSearch is a community-driven, Apache 2.0-licensed open-source search and analytics suite that makes it easy to ingest, search, visualise, and analyse data.
 
 ### OpenSearch - Resources
 
@@ -48,7 +48,7 @@ Apart from that, I was introduced to [cdk8s](https://cdk8s.io/) which is an open
 
 ## OSSummit - Day 2
 
-Day 2 involved topics around secure supply chain consumption with existing frameworks, how to be compliant in a cloud-native landscape and ways to perform Policy as Code.
+Why not start the day with a 5k run? Around 20ish people gathered together and enjoyed a morning run near the Danube river! The Day 2 keynotes involved topics around secure supply chain consumption with existing frameworks, how to be compliant in a cloud-native landscape and ways to perform Policy as Code.
 
 ### Frameworks
 
@@ -67,9 +67,13 @@ COPA is an open-source tool written in Go that allows DevSecOps engineers to dir
 
 Chainloop is an open-source project I found out while crowling at the booth. Chainloop provides a single source of truth for **metadata** and **artifacts**, plus a declarative attestation process. We can declaratively state the pieces of evidence and artifact expectations for different CI/CD pipelines.
 
-At the end of the day, had the chance to learn more about [Zephyr](https://github.com/zephyrproject-rtos/zephyr/tree/main) while attending interactive sessions about IoT development.
+### IoT
 
-Finally, if you have an interest in open-source research and enablement check out [TODO](https://todogroup.org/) and [LERO/CURIOOS](https://lero.ie/) initialives alongside the [opensource.net](https://opensource.net) website for relevant topics.
+If you are interested in IoT, I had the chance to learn more about [Zephyr](https://github.com/zephyrproject-rtos/zephyr/tree/main) while attending interactive sessions about IoT development.
+
+### Open-source and Research
+
+If you have an interest in open-source research and enablement check out [TODO](https://todogroup.org/) and [LERO/CURIOOS](https://lero.ie/) initialives alongside the [opensource.net](https://opensource.net) website for relevant topics.
 
 ## OSSummit - Day 3
 
@@ -87,11 +91,11 @@ For the conference, we decided to demonstrate how Sveltos can be used to deploy 
 
 ### Git Repository
 
-The Git repository with the manifest files and the execution instructions are located [here](https://github.com/egrosdou01/OSSummit_2024).
+The Git repository with the manifest files and the execution instructions is located [here](https://github.com/egrosdou01/OSSummit_2024).
 
 ## Conclusions
 
-I had a great fun at the conference! Not only had the chance to present alongside Gianluca but also met and interacted with cloud-native enthusiasts.
+I had a great fun at the conference! Not only had the chance to present alongside Gianluca, but I also met and interacted with cloud-native enthusiasts.
 
 Till next August 2025!
 

@@ -4,7 +4,6 @@ title: "Civo Navigate Berlin 2024"
 authors: [egrosdou01]
 date: 2024-09-12
 tags: [conference,open-source,kubernetes,gitops,devops,"2024"]
-tags: [conference,open-source,kubernetes,gitops,devops,"2024"]
 ---
 
 ## Introduction
@@ -13,7 +12,7 @@ Today's post will not be as technical as previous ones however, I wanted to shar
 
 Apart from that, I attended many different sessions covering relevant topics (Cloud native, Security, Thought Leadership, AI) and meet fellow enthusiasts.
 
-In the section below, I will outline some of my highlights and afterwards provide an introduction to the Sveltos presentation alongside the useful resources.
+In the sections below, I will outline some of my highlights and afterwards provide an introduction to the Sveltos presentation alongside the useful resources.
 
 ![title image reading "Civo Navigate Berlin 2024"](civo_navigate_berlin_2024.png)
 <!--truncate-->
