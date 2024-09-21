@@ -12,7 +12,7 @@ Today's post will not be as technical as previous ones however, I wanted to shar
 
 Apart from that, I attended many different sessions covering relevant topics (Cloud native, Security, Thought Leadership, AI) and meet fellow enthusiasts.
 
-In the section below, I will outline some of my highlights and afterwards provide an introduction to the Sveltos presentation alongside the useful resources.
+In the sections below, I will outline some of my highlights and afterwards provide an introduction to the Sveltos presentation alongside the useful resources.
 
 ![title image reading "Civo Navigate Berlin 2024"](civo_navigate_berlin_2024.png)
 <!--truncate-->
@@ -21,7 +21,7 @@ In the section below, I will outline some of my highlights and afterwards provid
 
 The day started quite chill by registering at the event, receiving a badge and becoming familiar with the location. Breakfast and coffee were provided which makes everything much easier.
 
-Fully energized, the conference started with the keynotes and a positive outline of cloud computing, innovation and sustainability, which I can personally relate to it. Afterwards, many empowering sessions took place, but some could not attend everything. I chose to attend those around developers empowerment and motivation. How developers can work best in diverse environments and how we can allow them to perform best by providing training, noise (notification) minimization, unnecessary meetings and freedom to think and decide on innovative solutions.
+Fully energized, the conference started with the keynotes and a positive outline of cloud computing, innovation and sustainability, which I can personally relate to it. More details about the Civo partnership with Deep Green can be found [here](https://www.civo.com/blog/greener-cloud-computing-deep-green). Afterwards, many empowering sessions took place, but some could not attend everything. I chose to attend those around developers empowerment and motivation. How developers can work best in diverse environments and how we can allow them to perform best by providing training, noise (notification) minimization, unnecessary meetings and freedom to think and decide on innovative solutions.
 
 From a technical side, I enjoyed a session about testing in modern CI/CD pipelines which gave me a different view of Kubernetes testing. This particular session was an introduction to [testkube](https://github.com/kubeshop/testkube). Not sure how much you can get from the free version in comparison to an enterprise one. Furthermore, I appreciated the informative session about the [Event Driven Ansible](https://www.ansible.com/blog/event-driven-ansible-is-here/) to reduce automation reaction time.
 
