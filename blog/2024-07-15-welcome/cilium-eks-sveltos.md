@@ -4,7 +4,7 @@ title: Cilium on EKS with Sveltos
 authors: [egrosdou01]
 date: 2024-07-15
 image: ./cilium_sveltos_eks.jpg
-tags: [cilium,open-source,kubernetes,gitops,devops,"2024"]
+tags: [sveltos,cilium,open-source,kubernetes,gitops,devops,"2024"]
 ---
 
 ## Introduction
@@ -71,19 +71,27 @@ The command will save the kubeconfig in the default directory `~/.kube/config`. 
 
 Once we have access to the cluster, it is time to proceed with the Sveltos cluster registration. As this is a cloud Kubernetes cluster, we need to ensure Sveltos has the **right set of permissions** to perform the Kubernetes deployments and add-ons. To do that, we will utilise `sveltosctl` and generate a new kubeconfig file.
 
+Download the `sveltosctl` binary [here](https://github.com/projectsveltos/sveltosctl/releases).
+
 ### Generate Sveltos kubeconfig
+
+:::tip
+Ensure you are authenticated with the AWS service account before performing the command below.
+:::
 
 ```bash
 $ export KUBECONFIG=<directory of the EKS kubeconfig file>
 
-$ sveltosctl generate kubeconfig --create --expirationSeconds=86400
+$ sveltosctl generate kubeconfig --create --expirationSeconds=86400 > eks_kubeconfig.yaml
 ```
 
-The `sveltosctl` command will create a kubeconfig file. The file will be used for the Sveltos cluster registration.
+The `sveltosctl` redirects the output of the command into a file named `eks_kubeconfig.yaml`. The file will be used by Sveltos for the managed cluster registration.
 
-### Register EKS Cluster
+### Register EKS Cluster - Management Cluster
 
 ```bash
+$ export KUBECONFIG=<Sveltos managament cluster>
+
 $ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
     --kubeconfig=<path to Sveltos file with Kubeconfig> \
     --labels=env=test
