@@ -2,7 +2,7 @@
 slug: ossummit-europe-2024
 title: "OSSummit Europe 2024"
 authors: [egrosdou01]
-date: 2024-09-17
+date: 2024-09-22
 tags: [conference,open-source,kubernetes,gitops,devops,"2024"]
 ---
 
@@ -48,7 +48,7 @@ Apart from that, I was introduced to [cdk8s](https://cdk8s.io/) which is an open
 
 ## OSSummit - Day 2
 
-Why not start the day with a 5k run? Around 20ish people gathered together and enjoyed a morning run near the Danube river! The Day 2 keynotes involved topics around secure supply chain consumption with existing frameworks, how to be compliant in a cloud-native landscape and ways to perform Policy as Code.
+Why not start the day with a 5k run? Around 20ish people gathered together and enjoyed a morning run near the Danube River! The Day 2 keynotes involved topics around secure supply chain consumption with existing frameworks, how to be compliant in a cloud-native landscape and ways to perform Policy as Code.
 
 ### Frameworks
 
@@ -73,7 +73,7 @@ If you are interested in IoT, I had the chance to learn more about [Zephyr](http
 
 ### Open-source and Research
 
-If you have an interest in open-source research and enablement check out [TODO](https://todogroup.org/) and [LERO/CURIOOS](https://lero.ie/) initialives alongside the [opensource.net](https://opensource.net) website for relevant topics.
+If you have an interest in open-source Research and Enablement check out [TODO](https://todogroup.org/) and [LERO/CURIOOS](https://lero.ie/) initialives alongside the [opensource.net](https://opensource.net) website for relevant topics.
 
 ## OSSummit - Day 3
 
@@ -97,7 +97,7 @@ The Git repository with the manifest files and the execution instructions is loc
 
 I had a great fun at the conference! Not only had the chance to present alongside Gianluca, but I also met and interacted with cloud-native enthusiasts.
 
-Till next August 2025!
+Till August 2025!
 
 ![title image reading "OSSummit Europe 2025"](ossummit_europe_2025.jpg)
 
