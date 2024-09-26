@@ -1,20 +1,20 @@
 ---
 slug: sveltos-introduction-to-tiers
-title: "Sveltos Tiers: Simplifying Subset Updates for Kubernetes Applications"
+title: "Sveltos Tiers: Day-2 Operations and Targeted Updates for Kubernetes Applications"
 authors: [egrosdou01]
-date: 2024-09-23
+date: 2024-09-26
 tags: [sveltos,open-source,kubernetes,gitops,devops,"2024"]
 ---
 
 ## Introduction
 
-In previous posts, we outlined how [Sveltos](https://github.com/projectsveltos) allows Platform administrators and tenant administrators to streamline Kubernetes applications and add-on deployments in a fleet of clusters. In today's blog post, we will take a step further and demonstrate how easy it is to **target** and **update** a **subset** of resources targeted by **multiple configurations**. By multiple configurations we refer to the [Sveltos ClusterProfile or Profile](https://projectsveltos.github.io/sveltos/addons/addons/) Custom Resource Defintions (CRDs).
+In previous posts, we outlined how [Sveltos](https://github.com/projectsveltos) allows Platform and tenant administrators to streamline Kubernetes applications and add-on deployments to a fleet of clusters. In today's blog post, we will take a step further and demonstrate how easy it is to **target** and **update** a **subset** of resources targeted by **multiple configurations**. By multiple configurations, we refer to the [Sveltos ClusterProfile or Profile](https://projectsveltos.github.io/sveltos/addons/addons/) Custom Resource Definitions (CRDs). The demonstration focuses on **day-2 operations** as we provide a way to **update and/or remove** resources without affecting **production** operations.
 
-This functionality is called [tiers](https://projectsveltos.github.io/sveltos/deployment_order/tiers/). Sveltos tiers provides a solution for managing the **deployment priority** when resources are targeted by multiple configurations. Tiers are easily interagrated into existing ClusterProfile/Profile definitions alognside defining the deployment order control and override behaviour in a straightforward manner.
+This functionality is called [tiers](https://projectsveltos.github.io/sveltos/deployment_order/tiers/). Sveltos tiers provide a solution for managing the **deployment priority** when resources are targeted by multiple configurations. Tiers are easily integrated into existing ClusterProfile/Profile definitions alongside defining the deployment order control and straightforwardly override behaviour.
 
 Today, we will cover the case of updating the [Cilium CNI](https://docs.cilium.io/en/latest/) in a subnet of clusters with the label set to `tier:zone2` without affecting the monitoring capabilities defined in the **same** ClusterProfile/Profile.
 
-![title image reading "Sveltos Tiers"](Sveltos_tiers.jpg)
+![title image reading "Sveltos Tiers"](sveltos_tiers.jpg)
 
 <!--truncate-->
 
@@ -46,12 +46,12 @@ To follow along, ensure the below are satisfied.
 1. sveltosctl installed
 
 :::tip
-If you are unaware of how to install Sveltos in a Kubernetes cluster, follow the instructions mentioned [here](https://projectsveltos.github.io/sveltos/getting_started/install/install/).
+If you are unaware of installing Sveltos in a Kubernetes cluster, follow the instructions mentioned [here](https://projectsveltos.github.io/sveltos/getting_started/install/install/).
 :::
 
 ## Step 1: Register Clusters with Sveltos
 
-For this demonstration the [Civo Kubernetes](https://www.civo.com/kubernetes) cluster offering was used. Once the clusters are ready, it is time to proceed with the Sveltos cluster registration. To do that, we will utilise `sveltosctl`. The `sveltosctl` can be downloaded [here](https://github.com/projectsveltos/sveltosctl/releases).
+For this demo, two [Civo Kubernetes](https://www.civo.com/kubernetes) clusters are used. Once the clusters are ready, we can proceed with the Sveltos cluster registration. To do that, we will utilise `sveltosctl`. The `sveltosctl` can be downloaded [here](https://github.com/projectsveltos/sveltosctl/releases).
 
 ```bash
 $ sveltosctl register cluster --namespace=<namespace> --cluster=<cluster name> \
@@ -67,7 +67,7 @@ $ sveltosctl register cluster --namespace=civo --cluster=mesh01 \
     --labels=env=prod,tier=zone01
 ```
 
-We will register the clusters with Sveltos on the mentioned **namespace**, **name**, and will attach the cluster labels to perform different deployment versions.
+We will register the clusters with Sveltos on the mentioned **namespace**, and **name**, and will attach the cluster labels to perform different deployment versions.
 
 :::note
 If the namespace does not exist in the management cluster, the command will fail with the namespace not found error. Ensure the defined namespace exists in the cluster before registration.
@@ -86,12 +86,12 @@ prod        prod-zone02   true    v1.28.7+k3s1     env=prod,projectsveltos.io/k8
 ```
 
 :::tip
-Ensure the labels set to the managed clusters are correct. They will be used at a later step.
+Ensure the labels set to the managed clusters are correct. We will use them at a later step.
 :::
 
 ## Step 2: Deploy Cilium and Monitoring Capabilities
 
-As platform administrators, for every managed cluster we want to have Cilium as our CNI and monitoring capabilities with Grafana, Prometheus and Loki. To do that, we will use the Sveltos ClusterProfile Kubernetes resource and deployment the required deployments in clusters with the label set to `env:prod`.
+As platform administrators, for every managed cluster, we want to have Cilium as our CNI and monitoring capabilities with Grafana, Prometheus and Loki. For that, we will use the Sveltos ClusterProfile Kubernetes resource and deploy the required deployments in clusters with the label set to `env:prod`.
 
 ### ClusterProfile - Cilium, Grafana, Prometheus
 
@@ -146,7 +146,7 @@ spec:
       end
 ```
 
-We instruct Sveltos to first install Cilium as our CNI. Next we deploy the Grafana and Prometheus stack and ensure the second deployment is in a `healthy` state before proceeding with the Loki integration. Once the validation health has succeeded, we will integrate Loki with the use of the below ClusterProfile.
+We instruct Sveltos firstly to install Cilium as our CNI. Next, we deploy the **Grafana** and **Prometheus** stack and ensure the second deployment is in a `healthy` state using the `validateHealths`. Afterwards, we proceed with the Loki integration.
 
 ### ClusterProfile - Loki
 
@@ -174,7 +174,7 @@ spec:
 ```
 
 :::note
-Ensure the `dependsOn` contains the name of the initial ClusterProfile. In our example `cluster-prod-initial-setup`.
+Ensure the `dependsOn` contains the correct name definition. In our example, it is`cluster-prod-initial-setup`.
 :::
 
 ### Deploy ClusterProfiles - Management Cluster
@@ -230,15 +230,15 @@ loki-promtail-jq5td   1/1     Running   0          10m
 loki-0                1/1     Running   0          10m
 ```
 
-We managed to install Cilium, Grafana, Prometheus and Loki to our Productions clusters. This is awseome! 🎉 Now, let's continue with the update of Cilium on a subnet of clusters only.
+We installed Cilium, Grafana, Prometheus and Loki in our production clusters. Awesome! 🎉 Now, we will continue with the **update** of **Cilium** on a subnet of clusters only.
 
 ## Step 3: Update Cilium tier:zone02 Cluster
 
-As mentioned before, we would like to use the Sveltos `tier` feature to update `Cilium` only on the clusters with the label set to `tier:zone02`. The matching cluster in our example will be the `prod-zone01` cluster.
+As mentioned, we would like to use the Sveltos `tier` feature to update `Cilium` only on the clusters with the label set to `tier:zone02`. The matching cluster in our example will be the `prod-zone01` cluster.
 
-**Issue**: As we have a ClusterProfile that installed Cilium to the cluster `prod-zone01`, how can we instruct Sveltos to update this cluster and only the Cilium deployment?
+**Issue**: Because we have a ClusterProfile that installed Cilium to the cluster `prod-zone01`, how can we instruct Sveltos to update this cluster and only the Cilium deployment?
 
-To achieve this, we will create a new ClusterProfile with the user of `tier`. Basically, we will instruct Sveltos to take the new ClusterProfile with a lower `tier` value set and update Cilium CNI only on the matching clusters.
+To achieve this, we will create a new ClusterProfile with the user of `tier`. We will instruct Sveltos to take the new ClusterProfile with a lower `tier` value set and update Cilium CNI only on the matching clusters.
 
 :::note
 The default `tier` value for every ClusterProfile/Profile is set to 100. If you set this to a lower value, Sveltos will take the lower value as a higher priority deployment.
@@ -299,11 +299,11 @@ quay.io/cilium/cilium:v1.16.1@sha256:0b4a3ab41a4760d86b7fc945b8783747ba27f29dac3
 
 ## Sveltos Tiers Benefits
 
-Sveltos tiers allow seamless **targeting** and **update** of different Kubernetes applications and add-ons in a subset of clusters. Now, we have a way to perform updates without headaches, be confident and full of control using the GitOps approach.
+Sveltos tiers allow seamless **targeting** 🎯 and **updating** 🔄 of different Kubernetes applications and add-ons in a subset of clusters. Now, we have a way to perform updates without headaches 😌 and be confident and full of control 🛠️ using the GitOps approach.
 
 ## Conclusions
 
-In a couple of minutes, with a minimal configuration effort and following the GitOps approach we updated Cilium CNI in a subset of clusters painless! Find more about the Sveltos tiers [here](https://projectsveltos.github.io/sveltos/deployment_order/tiers/).
+In a few minutes ⏳, with minimal configuration effort and following the GitOps approach, we updated Cilium CNI in a subset of clusters painless! 🎉 Find more about the Sveltos tiers [here](https://projectsveltos.github.io/sveltos/deployment_order/tiers/).
 
 ## ✉️ Contact
 
