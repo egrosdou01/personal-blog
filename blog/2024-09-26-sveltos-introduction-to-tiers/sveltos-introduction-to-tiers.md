@@ -1,6 +1,6 @@
 ---
 slug: sveltos-introduction-to-tiers
-title: "Sveltos Tiers: Day-2 Operations and Targeted Updates for Kubernetes Applications"
+title: "Sveltos Tiers: Efficient Day-2 Operations and Targeted Updates"
 authors: [egrosdou01]
 date: 2024-09-26
 tags: [sveltos,open-source,kubernetes,gitops,devops,"2024"]
