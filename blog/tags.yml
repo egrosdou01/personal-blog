@@ -22,6 +22,10 @@ cilium:
   label: Cilium
   permalink: /cilium
   description: eBPF-based Networking, Security, and Observability for Kubernetes
+tetragon:
+  label: Tetragon
+  permalink: /tetragon
+  description: Cilium Tetragon - powerful real-time, eBPF-based Security Observability and Runtime Enforcement
 devops:
   label: DevOps
   permalink: /devops
