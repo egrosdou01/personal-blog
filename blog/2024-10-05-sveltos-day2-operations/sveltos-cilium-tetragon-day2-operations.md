@@ -8,11 +8,11 @@ tags: [sveltos,cilium,tetragon,open-source,kubernetes,gitops,devops,"2024"]
 
 ## Introduction
 
-How easy is it to handle **Day-2** operations with existing CI/CD tooling? [Sveltos](https://github.com/projectsveltos) provides users the ability to perform not only **Day-0** operations but also helps platform administrators, tenant administrators and other operators with **Day-2** operations. For Day-2 operations for example, we can use the [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/healthcheck_type.go) and the [ClusterHealthCheck](https://raw.githubusercontent.com/projectsveltos/libsveltos/main/api/v1beta1/clusterhealthcheck_type.go) features to not only watch the health of the cluster but also collect information from the `managed` clusters and display them in the `management` cluster.
+How easy is it to handle **Day-2** operations with existing CI/CD tooling? [Sveltos](https://github.com/projectsveltos) provides the ability to perform not only **Day-0** operations but also helps platform administrators, tenant administrators and other operators with **Day-2** operations. For example, we can use the [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/healthcheck_type.go) and the [ClusterHealthCheck](https://raw.githubusercontent.com/projectsveltos/libsveltos/main/api/v1beta1/clusterhealthcheck_type.go) features to not only watch the health of a cluster but also collect information from the `managed` clusters and display them in the `management` cluster.
 
-In today's blog post, we will cover how easy it is to deploy [Cilium](https://cilium.io/) as our CNI alongside [Cilium Tetragon](https://tetragon.io/) for observability. We will deploy a simple `TracingPolicy` to capture socket connections and then use Sveltos to display the tracing results back to the `management` cluster.
+In today's blog post, we will cover a way of deploying [Cilium](https://cilium.io/) as our CNI alongside [Cilium Tetragon](https://tetragon.io/) for observability. We will then continue with a simple `TracingPolicy` deployment to capture socket connections and then use Sveltos to display the tracing results back to the `management` cluster.
 
-The goal of the demonstration is to provide a basic understanding of how Sveltos is used for different Kubernetes cluster operations based on different use cases.
+The goal of the demonstration is to showcase how Sveltos can be used for different Kubernetes cluster operations based on the use case at hand.
 
 ![title image reading "Sveltos Health Check"](Sveltos_Cilium_Tetragon_HealthCheck.jpg)
 
@@ -50,9 +50,9 @@ To follow along, ensure the below are satisfied.
 If you are unaware of installing Sveltos in a Kubernetes cluster, follow the instructions mentioned [here](https://projectsveltos.github.io/sveltos/getting_started/install/install/).
 :::
 
-## Step 1: Register Clusters with Sveltos
+## Step 1: Cluster Registration with Sveltos
 
-Once the Kubernetes cluster is ready, we can continue with the Sveltos cluster registration. To do that, we will utilise `sveltosctl`. The `sveltosctl` can be downloaded [here](https://github.com/projectsveltos/sveltosctl/releases).
+Once the Kubernetes cluster is ready, we can continue with the Sveltos registration. To do that, we will utilise `sveltosctl`. The `sveltosctl` can be downloaded [here](https://github.com/projectsveltos/sveltosctl/releases).
 
 ### Example Registration
 
@@ -62,7 +62,7 @@ $ sveltosctl register cluster --namespace=test --cluster=tetragon-test \
     --labels=env=test
 ```
 
-We will register the cluster with Sveltos on the mentioned **namespace**, and **name**, and will attach the cluster labels to perform different deployment versions.
+The cluster above will be registered with Sveltos on the mentioned **namespace**, and **name**, and will attach the cluster labels to perform different deployment versions.
 
 :::note
 If the namespace does not exist in the management cluster, the command will fail with the namespace not found error. Ensure the defined namespace exists in the cluster before registration.
@@ -80,7 +80,7 @@ test        tetragon-test   true    v1.29.2+k3s1     env=test,projectsveltos.io/
 ```
 
 :::tip
-Ensure the labels set to the managed clusters are correct. We will use them at a later step.
+Ensure the labels set are correct. We will use them at a later step.
 :::
 
 ## Step 2: Custom ConfigMap, Cilium, Tetragon Deployment
@@ -120,14 +120,10 @@ spec:
     kind: ConfigMap
 ```
 
-We instruct Sveltos to install Cilium as our CNI. Next, we deploy **Tetragon** and afterwards, we proceed with the deployment of a `ConfigMap` with the name `tetragon-policy-socket-log` which has been already been deployed in the `management` cluster.
-
-:::note
-A copy of the `ConfigMap` YAML definition is located [here](https://github.com/egrosdou01/sveltos-demo-resources/blob/main/day-2-operations/sveltos-cilium-tetragon/env-test/tetragon_configmap.yaml).
-:::
+Sveltos follows the top-down approach when it comes to add-on and application deployment. First, Cilium will get deployed as our CNI. Next, then **Tetragon** and afterwards, we proceed with the deployment of a `ConfigMap` with the name `tetragon-policy-socket-log` which has already been deployed in the `management` cluster.
 
 :::tip
-Keep in mind that deploying the `ConfigMap` on the `management` cluster and in the `default` namespace needs to happen before the Sveltos `ClusterProfile` deployment.
+A copy of the `ConfigMap` YAML definition is located [here](https://github.com/egrosdou01/sveltos-demo-resources/blob/main/day-2-operations/sveltos-cilium-tetragon/env-test/tetragon_configmap.yaml).
 :::
 
 ### Deploy ConfigMap and ClusterProfile - Management Cluster
@@ -187,14 +183,18 @@ pod/tetragon-log-fetcher-28803330-wpl9r   0/1     Completed   0          3m38s
 pod/tetragon-log-fetcher-28803332-r7q5v   0/1     Completed   0          98s
 ```
 
-Based on the output above, we have deployed Cilium, Tetragon and a CronJob to collect Tetragon logs based on a tracing policy every 2 minutes with a timeout of 5 sec. 🎉 We can proceed further and use the Sveltos `ClucterHealthCheck` and `HealthCheck` to collect the data of the newly created `ConfiMap` in the managed cluster.
+Based on the output above, we have deployed **Cilium**, **Tetragon** and a **CronJob** to collect Tetragon logs based on a tracing policy every 2 minutes with a timeout of 5 sec. 🎉 We can proceed further and use the Sveltos `ClucterHealthCheck` and `HealthCheck` to collect the data of the newly created `ConfiMap` in the managed cluster.
+
+:::note
+If the defined `ConfigMap` or `CronJob` does not fit your needs, feel free to update the YAML definitions based on your liking.
+:::
 
 ## Step 3: Deploy ClusterHealthCheck and HealthCheck
 
 To be able to collect resources from the Sveltos managed cluster, we will use a new YAML definition to collect the data from the `ConfigMap` with the name `tetragon-logs`.
 
 :::tip
-The `ConfigMap tetragon-logs` is **created** and **patched** with a periodic execution of `Jobs` as mentioned in Step 2.
+The `ConfigMap tetragon-logs` is **created** and **patched** with a periodic execution of `Jobs` mentioned in Step 2.
 :::
 
 ### HealthCheck and ClusterHealthCheck Defintion
@@ -278,7 +278,7 @@ $ ./sveltosctl show resources
 +--------------------+---------------------+-----------+---------------+--------------------------------------------------------------------------------------------------------------+
 ```
 
-From the output above, we can see that we are able to display logs collected from a Tetragon TracingPolicy and make them available in a management cluster! Cool, right?
+From the output above, we see the logs collected from the Tetragon TracingPolicy coming from a `managed` cluster and making them available in a `management` cluster! Cool, right? The same approach can be used with different data located in the `managed` clusters. A post written by Gianluca outlining the collection of `kube-bench` scanning results can be found [here](https://itnext.io/ensurincis-benchmark-compliance-across-multiple-kubernetes-clusters-dd544682e786).
 
 ## Sveltos for Day-2 Operations Benefits
 
@@ -288,7 +288,7 @@ Sveltos allows users to deploy the required add-on and deployments to a fleet of
 
 In a few minutes ⏳, with minimal configuration effort and following the GitOps approach, we deployed Cilium as our CNI, Cilium Tetragon for observability alongside polling and displaying of critical tracing results to the management cluster painlessly! 🎉
 
-In the next couple of blog posts, we will touch more topics around Day 2 operations.
+In the next blog posts, we will touch on topics around Day-2 operations.
 
 ## Resources
 
