@@ -3,7 +3,15 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
 
-const talks = [];
+const talks = [
+  {
+    id: 'IffrzanQRRc',
+    permalink: 'https://www.youtube.com/watch?v=IffrzanQRRc',
+    date: '2024-10-04',
+    formattedDate: '4th October 2024',
+    title: 'How to Make Your Kubernetes Add-Ons Management Painless in Multi Cloud',
+  },
+];
 
 const thumbnailResolutions = [
   'default.jpg',
@@ -46,7 +54,7 @@ function Talks() {
         <div className="container">
           <h1 className="hero__title">Talks</h1>
           <p className="hero__subtitle">
-            Work in progress...
+            A space for sharing thoughts and conversations about ☁️ Cloud Native technologies, Kubernetes, and GitOps practices.
           </p>
         </div>
       </header>
