@@ -77,6 +77,7 @@ const config = {
           {to: 'blog', label: 'Blog', position: 'left'},
           {to: '/blog/tags', label: 'Tags', position: 'left'},
           {to: 'talks', label: 'Talks', position: 'left'},
+          {to: 'favourites', label: 'Favourites', position: 'left'},
           {
             href: 'https://github.com/egrosdou01',
             label: 'GitHub',
