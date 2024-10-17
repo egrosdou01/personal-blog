@@ -41,7 +41,7 @@ function Favourites() {
         <div className="container">
           <h1 className="hero__title">Favourites</h1>
           <p className="hero__subtitle">
-            A space for sharing useful learning material about GitOps and DevOps approaches. Coming soon.
+            A space for sharing helpful learning materials about GitOps and DevOps approaches!✨ Stay tuned—coming soon! 🚀
           </p>
         </div>
       </header>
