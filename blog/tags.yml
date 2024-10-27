@@ -58,3 +58,7 @@ conference:
   label: Conference
   permalink: /conference
   description: General Conference Tag
+troubleshooting-insights:
+  label: Troubleshooting Insights
+  permalink: /troubleshooting-insights
+  description: Label attached to posts related to K8s insights
