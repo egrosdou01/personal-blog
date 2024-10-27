@@ -259,6 +259,12 @@ The output above indicates that a client queries a DNS server, and the server re
 
 - **Debugging DNS**: https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/
 
+## ✉️ Contact
+
+If you have any questions, feel free to get in touch! You can use the `Discussions` option found [here](https://github.com/egrosdou01/personal-blog/discussions) or reach out to me on any of the social media platforms provided. 😊
+
+We look forward to hearing from you!
+
 ## Conclusions
 
 Is it DNS at the end? This is something you will have to find out! Hopefully, the post gave you some ideas to troubleshoot with confidence DNS issues in a Kubernetes environment.
