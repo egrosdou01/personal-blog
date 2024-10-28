@@ -8,7 +8,7 @@ tags: [sveltos,cilium,tetragon,open-source,kubernetes,gitops,devops,"2024"]
 
 ## Introduction
 
-How easy is it to handle **Day-2** operations with existing CI/CD tooling? [Sveltos](https://github.com/projectsveltos) provides the ability to perform not only **Day-0** operations but also helps platform administrators, tenant administrators and other operators with **Day-2** operations. For example, we can use the [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/healthcheck_type.go) and the [ClusterHealthCheck](https://raw.githubusercontent.com/projectsveltos/libsveltos/main/api/v1beta1/clusterhealthcheck_type.go) features to not only watch the health of a cluster but also collect information from the `managed` clusters and display them in the `management` cluster.
+How easy is it to handle **Day-2** operations with existing CI/CD tooling? [Sveltos](https://github.com/projectsveltos) provides the ability to perform not only **Day-1** operations but also helps platform administrators, tenant administrators and other operators with **Day-2** operations. For example, we can use the [HealthCheck](https://github.com/projectsveltos/libsveltos/blob/main/api/v1beta1/healthcheck_type.go) and the [ClusterHealthCheck](https://raw.githubusercontent.com/projectsveltos/libsveltos/main/api/v1beta1/clusterhealthcheck_type.go) features to not only watch the health of a cluster but also collect information from the `managed` clusters and display them in the `management` cluster.
 
 In today's blog post, we will cover a way of deploying [Cilium](https://cilium.io/) as our CNI alongside [Cilium Tetragon](https://tetragon.io/) for observability. We will then continue with a simple `TracingPolicy` deployment to capture socket connections and then use Sveltos to display the tracing results back to the `management` cluster.
 
@@ -37,6 +37,10 @@ The goal of the demonstration is to showcase how Sveltos can be used for differe
 +-------------+---------------------+
 
 ```
+
+## GitHub Resources
+
+The YAML definition files are located [here](https://github.com/egrosdou01/sveltos-demo-resources/tree/main/day-2-operations/sveltos-cilium-tetragon).
 
 ## Prerequisites
 
