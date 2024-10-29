@@ -74,7 +74,7 @@ The below steps were performed to double-check the underlying infrastructure.
         ```bash
         $ ping test-site.example-domain.com # Check whether we can reach the custom domain
 
-        $ ping www.google.com # Check whether we can reach the Internet
+        $ ping 8.8.8.8 # Check whether we can reach the Internet
         ```
 
         If one of the commands above fail, this might be an indication that routing is broken, or something else is blocking traffic.
@@ -109,9 +109,9 @@ Even from a Kubernetes point of view, we will perform the well used `ping` and `
     ```bash
       $ kubectl exec -it dnsutils -- /bin/sh
 
-      / # ping www.google.com
-      PING www.google.com (142.250.185.100): 56 data bytes
-      64 bytes from 142.250.185.100: seq=0 ttl=112 time=9.386 ms
+      / # ping 8.8.8.8
+      PING 8.8.8.8 (8.8.8.8): 56 data bytes
+      64 bytes from 8.8.8.8: icmp_seq=0 ttl=119 time=41.526 ms
 
       / # dig SOA www.google.com
       ;; AUTHORITY SECTION:
